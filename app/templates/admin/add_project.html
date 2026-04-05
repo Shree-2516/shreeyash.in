@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main class="page-shell">
+    <section class="admin-shell narrow">
+        <p class="eyebrow">Admin / Add Project</p>
+        <h2>Create a laboratory entry</h2>
+        <p class="hero-text">Use the Problem, Solution, Result format so each project reads sharply on the public portfolio.</p>
+
+        <form class="admin-form" action="{{ url_for('admin.add_project') }}" method="post" enctype="multipart/form-data">
+            <label for="title">Title</label>
+            <input id="title" name="title" type="text" required>
+
+            <label for="tech_stack">Tech Stack</label>
+            <input id="tech_stack" name="tech_stack" type="text">
+
+            <label for="github_link">GitHub Link</label>
+            <input id="github_link" name="github_link" type="text">
+
+            <label for="problem">Problem</label>
+            <textarea id="problem" name="problem" rows="4" required></textarea>
+
+            <label for="solution">Solution</label>
+            <textarea id="solution" name="solution" rows="4" required></textarea>
+
+            <label for="result">Result</label>
+            <textarea id="result" name="result" rows="4" required></textarea>
+
+            <label for="image">Project Image</label>
+            <input id="image" name="image" type="file" accept=".png,.jpg,.jpeg,.gif,.webp">
+
+            <div class="admin-actions">
+                <button class="button" type="submit">Save Project</button>
+                <a class="button button-secondary" href="{{ url_for('admin.dashboard') }}">Back</a>
+            </div>
+        </form>
+    </section>
+</main>
+{% endblock %}

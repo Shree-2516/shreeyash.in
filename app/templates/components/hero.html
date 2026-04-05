@@ -1,0 +1,37 @@
+<section class="hero-panel">
+    <div class="hero-card terminal-shell">
+        <div class="terminal-topbar">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <p class="terminal-line">$ load_profile.sh</p>
+        <div class="terminal-stream">
+            <p><span class="prompt">&gt;</span> initializing...</p>
+            <p><span class="prompt">&gt;</span> backend_engineer_detected <span class="terminal-ok">[ok]</span></p>
+            <p><span class="prompt">&gt;</span> ai_ml_module_loaded <span class="terminal-ok">[ok]</span></p>
+            <p><span class="prompt">&gt;</span> tech_stack: {{ profile.tech_stack_summary|lower }}</p>
+            <p><span class="prompt">&gt;</span> status: ready_for_hiring</p>
+        </div>
+    </div>
+
+    <div class="hero-copy">
+        <p class="eyebrow">The Hook</p>
+        <h1>{{ profile.name }}</h1>
+        <p class="hero-text">
+            {{ profile.tagline }}
+        </p>
+        <p class="hero-proof">
+            Building backend systems, intelligent data products, and portfolio-ready full-stack experiences.
+        </p>
+        <div class="hero-actions">
+            <button class="button terminal-button" onclick="scrollToProjects()">View Projects</button>
+            <a class="button button-secondary" href="{{ profile.resume_url }}">Download Resume</a>
+            <a class="button button-ghost" href="{{ url_for('main.journey') }}">View My Journey</a>
+        </div>
+        <div class="social-proof">
+            <a class="social-link" href="{{ profile.github_url }}" target="_blank" rel="noreferrer">GH GitHub</a>
+            <a class="social-link" href="{{ profile.linkedin_url }}" target="_blank" rel="noreferrer">IN LinkedIn</a>
+        </div>
+    </div>
+</section>

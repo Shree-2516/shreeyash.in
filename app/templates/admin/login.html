@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main class="page-shell">
+    <section class="admin-shell narrow">
+        <p class="eyebrow">Admin Authentication</p>
+        <h2>Enter the control plane</h2>
+        <p class="hero-text">Sign in to manage project cards, uploads, and portfolio content.</p>
+
+        <form class="admin-form" action="{{ url_for('admin.login') }}" method="post">
+            <label for="username">Username</label>
+            <input id="username" name="username" type="text" required>
+
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" required>
+
+            <button class="button" type="submit">Sign In</button>
+        </form>
+    </section>
+</main>
+{% endblock %}

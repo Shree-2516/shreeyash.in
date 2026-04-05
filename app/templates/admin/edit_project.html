@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main class="page-shell">
+    <section class="admin-shell narrow">
+        <p class="eyebrow">Admin / Edit Project</p>
+        <h2>Update project</h2>
+
+        <form class="admin-form" action="{{ url_for('admin.edit_project', id=project.id) }}" method="post" enctype="multipart/form-data">
+            <label for="title">Title</label>
+            <input id="title" name="title" type="text" value="{{ project.title }}" required>
+
+            <label for="tech_stack">Tech Stack</label>
+            <input id="tech_stack" name="tech_stack" type="text" value="{{ project.tech_stack or '' }}">
+
+            <label for="github_link">GitHub Link</label>
+            <input id="github_link" name="github_link" type="text" value="{{ project.github_link or '' }}">
+
+            <label for="problem">Problem</label>
+            <textarea id="problem" name="problem" rows="4" required>{{ project.problem }}</textarea>
+
+            <label for="solution">Solution</label>
+            <textarea id="solution" name="solution" rows="4" required>{{ project.solution }}</textarea>
+
+            <label for="result">Result</label>
+            <textarea id="result" name="result" rows="4" required>{{ project.result }}</textarea>
+
+            <label for="image">Project Image</label>
+            <input id="image" name="image" type="file" accept=".png,.jpg,.jpeg,.gif,.webp">
+
+            <div class="admin-actions">
+                <button class="button" type="submit">Save Changes</button>
+                <a class="button button-secondary" href="{{ url_for('admin.dashboard') }}">Back</a>
+            </div>
+        </form>
+    </section>
+</main>
+{% endblock %}

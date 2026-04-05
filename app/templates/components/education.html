@@ -1,0 +1,23 @@
+<section class="content-section">
+    <div class="section-heading">
+        <p class="eyebrow">The System Log</p>
+        <h2>Education &amp; achievements</h2>
+    </div>
+    <div class="info-grid">
+        <article class="card">
+            <h3>Education</h3>
+            <p><b>Degree:</b> {{ profile.degree }}</p>
+            <p><b>University:</b> {{ profile.university }}</p>
+            <p><b>Key Coursework:</b></p>
+            {% for item in profile.coursework.splitlines() if item.strip() %}
+            <p class="muted">{{ item.strip() }}</p>
+            {% endfor %}
+        </article>
+        <article class="card">
+            <h3>Achievements</h3>
+            {% for item in profile.achievements.splitlines() if item.strip() %}
+            <p>{{ item.strip() }}</p>
+            {% endfor %}
+        </article>
+    </div>
+</section>

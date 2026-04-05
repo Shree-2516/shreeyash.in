@@ -1,0 +1,42 @@
+<section class="content-section">
+    <div class="section-heading">
+        <p class="eyebrow">The Git Log</p>
+        <h2>Professional growth</h2>
+    </div>
+
+    <div class="git-timeline">
+        <div class="timeline-rail"></div>
+        {% if experiences %}
+            {% for experience in experiences %}
+            <article class="card timeline-item">
+                <span class="timeline-dot"></span>
+                <p class="timeline-tag">{% if loop.first %}HEAD - current{% else %}commit-{{ experience.id }}{% endif %}</p>
+                <h3>{{ experience.role }}</h3>
+                <p class="muted">{{ experience.company }}</p>
+                <p>{{ experience.description }}</p>
+            </article>
+            {% endfor %}
+        {% else %}
+            <article class="card timeline-item">
+                <span class="timeline-dot"></span>
+                <p class="timeline-tag">HEAD - current</p>
+                <h3>Data Science Intern</h3>
+                <p class="muted">Current role</p>
+                <p>
+                    Working on pipeline optimization, model-serving workflows, and turning data-heavy
+                    experimentation into reliable outputs.
+                </p>
+            </article>
+            <article class="card timeline-item">
+                <span class="timeline-dot"></span>
+                <p class="timeline-tag">feature / mern-foundation</p>
+                <h3>Software Engineer Background</h3>
+                <p class="muted">Full-stack and backend engineering</p>
+                <p>
+                    Strong MERN-stack grounding combined with Python backend work across APIs,
+                    dashboards, authentication, databases, and project deployment structures.
+                </p>
+            </article>
+        {% endif %}
+    </div>
+</section>

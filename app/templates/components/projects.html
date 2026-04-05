@@ -1,0 +1,50 @@
+<section id="projects" class="content-section">
+    <div class="section-heading">
+        <p class="eyebrow">The Laboratory</p>
+        <h2>The main event</h2>
+    </div>
+
+    <div class="project-grid">
+        {% if projects %}
+            {% for p in projects[:3] %}
+            <article class="card project-card">
+                {% if p.image_url %}
+                <img class="project-image" src="{{ p.image_url }}" alt="{{ p.title }}">
+                {% endif %}
+                <h3>{{ p.title }}</h3>
+                {% if p.tech_stack %}
+                <p><b>Tech Stack:</b> {{ p.tech_stack }}</p>
+                {% endif %}
+                <p><b>Problem:</b> {{ p.problem }}</p>
+                <p><b>Solution:</b> {{ p.solution }}</p>
+                <p><b>Result:</b> {{ p.result }}</p>
+                {% if p.github_link %}
+                <p><b>GitHub:</b> <a href="{{ p.github_link }}" target="_blank" rel="noreferrer">{{ p.github_link }}</a></p>
+                {% endif %}
+            </article>
+            {% endfor %}
+        {% else %}
+            <article class="card project-card">
+                <p class="timeline-tag">AI / ML</p>
+                <h3>Smart City Municipal Issue Detection</h3>
+                <p><b>Problem:</b> Manual issue review slows response time for city complaints and field incidents.</p>
+                <p><b>Solution:</b> Built a Flask-powered detection workflow using YOLOv8 to classify and route municipal issues.</p>
+                <p><b>Result:</b> Reduced review friction and created a scalable backend-assisted reporting workflow.</p>
+            </article>
+            <article class="card project-card">
+                <p class="timeline-tag">Full-Stack</p>
+                <h3>Personal Portfolio with Django/PostgreSQL</h3>
+                <p><b>Problem:</b> Needed a portfolio that proves backend architecture, not just front-end presentation.</p>
+                <p><b>Solution:</b> Built a Django and PostgreSQL portfolio with structured data models, admin control, and maintainable views.</p>
+                <p><b>Result:</b> Demonstrated end-to-end system design across data, templates, routing, and deployment readiness.</p>
+            </article>
+            <article class="card project-card">
+                <p class="timeline-tag">Data / Analytics</p>
+                <h3>Restaurant Recommendation System</h3>
+                <p><b>Problem:</b> Restaurant discovery becomes noisy when users face too many options with weak personalization.</p>
+                <p><b>Solution:</b> Applied a content-based recommendation approach to rank restaurants by feature similarity and user preference.</p>
+                <p><b>Result:</b> Improved decision quality and turned raw dining data into an actionable analytics product.</p>
+            </article>
+        {% endif %}
+    </div>
+</section>

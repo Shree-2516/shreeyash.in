@@ -1,0 +1,195 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main class="page-shell admin-page">
+    <section class="admin-toolbar card">
+        <div>
+            <p class="eyebrow">Admin Dashboard</p>
+            <h1 class="admin-title">Manage Portfolio Data</h1>
+        </div>
+        <div class="admin-actions">
+            <form action="{{ url_for('admin.logout') }}" method="post">
+                <button class="button button-secondary" type="submit">Logout</button>
+            </form>
+        </div>
+    </section>
+
+    <nav class="admin-nav card">
+        <a href="#profile">Profile</a>
+        <a href="#skills">Skills</a>
+        <a href="#experience">Experience</a>
+        <a href="#projects">Projects</a>
+    </nav>
+
+    <section id="profile" class="admin-shell">
+        <div class="admin-header">
+            <div>
+                <p class="eyebrow">Profile</p>
+                <h2>Hero, about, contact</h2>
+            </div>
+        </div>
+
+        <form class="admin-form admin-grid-form" action="{{ url_for('admin.dashboard') }}" method="post">
+            <label for="name">Name</label>
+            <input id="name" name="name" type="text" value="{{ profile.name }}" required>
+
+            <label for="tagline">Tagline</label>
+            <input id="tagline" name="tagline" type="text" value="{{ profile.tagline }}" required>
+
+            <label for="location">Location</label>
+            <input id="location" name="location" type="text" value="{{ profile.location }}">
+
+            <label for="internship_status">Internship Count</label>
+            <input id="internship_status" name="internship_status" type="text" value="{{ profile.internship_status }}">
+
+            <label for="leetcode_summary">LeetCode Count</label>
+            <input id="leetcode_summary" name="leetcode_summary" type="text" value="{{ profile.leetcode_summary }}">
+
+            <label for="tech_stack_summary">Tech Stack Summary</label>
+            <input id="tech_stack_summary" name="tech_stack_summary" type="text" value="{{ profile.tech_stack_summary }}">
+
+            <label for="about_summary">About Summary</label>
+            <textarea id="about_summary" name="about_summary" rows="5">{{ profile.about_summary }}</textarea>
+
+            <label for="resume_url">Resume URL</label>
+            <input id="resume_url" name="resume_url" type="text" value="{{ profile.resume_url }}">
+
+            <label for="linkedin_url">LinkedIn</label>
+            <input id="linkedin_url" name="linkedin_url" type="text" value="{{ profile.linkedin_url }}">
+
+            <label for="github_url">GitHub</label>
+            <input id="github_url" name="github_url" type="text" value="{{ profile.github_url }}">
+
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" value="{{ profile.email }}">
+
+            <label for="degree">Degree</label>
+            <input id="degree" name="degree" type="text" value="{{ profile.degree }}">
+
+            <label for="university">University</label>
+            <input id="university" name="university" type="text" value="{{ profile.university }}">
+
+            <label for="coursework">Coursework</label>
+            <textarea id="coursework" name="coursework" rows="4">{{ profile.coursework }}</textarea>
+
+            <label for="achievements">Achievements</label>
+            <textarea id="achievements" name="achievements" rows="4">{{ profile.achievements }}</textarea>
+
+            <div class="admin-actions">
+                <button class="button" type="submit">Save Profile</button>
+            </div>
+        </form>
+    </section>
+
+    <section id="skills" class="admin-shell">
+        <div class="admin-header">
+            <div>
+                <p class="eyebrow">Skills</p>
+                <h2>Add or remove skills</h2>
+            </div>
+        </div>
+
+        <form class="admin-form admin-inline-form" action="{{ url_for('admin.add_skill') }}" method="post">
+            <select name="category" required>
+                <option value="Backend">Backend</option>
+                <option value="AI">AI</option>
+                <option value="Cloud">Cloud</option>
+                <option value="Language">Language</option>
+            </select>
+            <input name="name" type="text" placeholder="Skill name" required>
+            <button class="button" type="submit">Add Skill</button>
+        </form>
+
+        <div class="admin-grid">
+            {% for skill in skills %}
+            <article class="card">
+                <h3>{{ skill.name }}</h3>
+                <p class="muted">{{ skill.category }}</p>
+                <form action="{{ url_for('admin.delete_skill', id=skill.id) }}" method="post">
+                    <button class="delete-link delete-button" type="submit">Delete</button>
+                </form>
+            </article>
+            {% else %}
+            <article class="card empty-card">
+                <h3>No skills yet</h3>
+            </article>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section id="experience" class="admin-shell">
+        <div class="admin-header">
+            <div>
+                <p class="eyebrow">Experience</p>
+                <h2>Timeline entries</h2>
+            </div>
+        </div>
+
+        <form class="admin-form" action="{{ url_for('admin.add_experience') }}" method="post">
+            <label for="role">Role</label>
+            <input id="role" name="role" type="text" required>
+
+            <label for="company">Company</label>
+            <input id="company" name="company" type="text">
+
+            <label for="impact">Impact</label>
+            <textarea id="impact" name="impact" rows="4" required></textarea>
+
+            <div class="admin-actions">
+                <button class="button" type="submit">Add Experience</button>
+            </div>
+        </form>
+
+        <div class="admin-grid">
+            {% for experience in experiences %}
+            <article class="card">
+                <h3>{{ experience.role }}</h3>
+                <p class="muted">{{ experience.company }}</p>
+                <p>{{ experience.description }}</p>
+                <form action="{{ url_for('admin.delete_experience', id=experience.id) }}" method="post">
+                    <button class="delete-link delete-button" type="submit">Delete</button>
+                </form>
+            </article>
+            {% else %}
+            <article class="card empty-card">
+                <h3>No experience entries yet</h3>
+            </article>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section id="projects" class="admin-shell">
+        <div class="admin-header">
+            <div>
+                <p class="eyebrow">Projects</p>
+                <h2>Full project CRUD</h2>
+            </div>
+            <a class="button" href="{{ url_for('admin.add_project') }}">Add Project</a>
+        </div>
+
+        <div class="admin-grid">
+            {% for p in projects %}
+            <article class="card project-card">
+                {% if p.image_url %}
+                <img class="project-image" src="{{ p.image_url }}" alt="{{ p.title }}">
+                {% endif %}
+                <h3>{{ p.title }}</h3>
+                <p><b>Tech Stack:</b> {{ p.tech_stack or "-" }}</p>
+                <p><b>GitHub:</b> {{ p.github_link or "-" }}</p>
+                <p><b>Problem:</b> {{ p.problem }}</p>
+                <p><b>Solution:</b> {{ p.solution }}</p>
+                <p><b>Result:</b> {{ p.result }}</p>
+                <a class="button button-secondary" href="{{ url_for('admin.edit_project', id=p.id) }}">Edit</a>
+                <form action="{{ url_for('admin.delete', id=p.id) }}" method="post">
+                    <button class="delete-link delete-button" type="submit">Delete</button>
+                </form>
+            </article>
+            {% else %}
+            <article class="card empty-card">
+                <h3>No projects yet</h3>
+            </article>
+            {% endfor %}
+        </div>
+    </section>
+</main>
+{% endblock %}

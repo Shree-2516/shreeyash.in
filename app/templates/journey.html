@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ profile.name }} | Journey</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/journey.css') }}">
+</head>
+<body class="journey-body">
+    <div class="journey-bg">
+        <div class="journey-orb orb-one"></div>
+        <div class="journey-orb orb-two"></div>
+        <div class="journey-orb orb-three"></div>
+        <div class="journey-grid"></div>
+    </div>
+
+    <main class="journey-page">
+        <nav class="journey-nav">
+            <a class="journey-brand" href="{{ url_for('main.home') }}">{{ profile.name }}</a>
+            <div class="journey-nav-links">
+                <a href="{{ url_for('main.home') }}">Home</a>
+                <a href="#timeline">Timeline</a>
+                <a href="#next-goal">Next Goal</a>
+            </div>
+        </nav>
+
+        <section class="journey-hero">
+            <div class="journey-hero-copy" data-depth="0.15">
+                <p class="journey-kicker">My Journey</p>
+                <h1>Open Timeline</h1>
+                <p class="journey-summary">
+                    From school days in Danoli to backend development, internships, and the path toward AI engineering.
+                </p>
+            </div>
+            <div class="journey-hero-panel" data-depth="0.3">
+                <p class="journey-terminal-label">$ open_timeline --full</p>
+                <div class="journey-terminal-lines">
+                    <span>phase.school initialized</span>
+                    <span>phase.college progressing</span>
+                    <span>phase.internship deployed</span>
+                    <span>phase.ai current target</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="timeline" class="timeline">
+            <div class="timeline-progress"></div>
+
+            <div class="timeline-item stage-school" data-depth="0.14">
+                <div class="timeline-icon">01</div>
+                <div class="content">
+                    <span class="stage-chip">School</span>
+                    <h3>2003</h3>
+                    <p>Born</p>
+                </div>
+            </div>
+
+            <div class="timeline-item stage-school" data-depth="0.18">
+                <div class="timeline-icon">02</div>
+                <div class="content">
+                    <span class="stage-chip">School</span>
+                    <h3>2010 - 2018</h3>
+                    <p>Schooling (1st-10th)</p>
+                    <p>Danoli High School, Danoli</p>
+                </div>
+            </div>
+
+            <div class="timeline-item stage-school" data-depth="0.12">
+                <div class="timeline-icon">03</div>
+                <div class="content">
+                    <span class="stage-chip">Checkpoint</span>
+                    <h3>2019</h3>
+                    <p>10th Passout</p>
+                </div>
+            </div>
+
+            <div class="timeline-item stage-college" data-depth="0.2">
+                <div class="timeline-icon">04</div>
+                <div class="content">
+                    <span class="stage-chip">College</span>
+                    <h3>2019 - 2021</h3>
+                    <p>11th &amp; 12th (Science - Maths)</p>
+                    <p>Jaysingpur College, Jaysingpur</p>
+                    <p>(COVID period)</p>
+                </div>
+            </div>
+
+            <div class="timeline-item stage-college" data-depth="0.16">
+                <div class="timeline-icon">05</div>
+                <div class="content">
+                    <span class="stage-chip">Diploma</span>
+                    <h3>2020 - 2023</h3>
+                    <p>Diploma in Computer Science</p>
+                    <p>Sharad Institute of Technology Polytechnic</p>
+                </div>
+            </div>
+
+            <div class="timeline-item stage-college" data-depth="0.13">
+                <div class="timeline-icon">06</div>
+                <div class="content">
+                    <span class="stage-chip">Checkpoint</span>
+                    <h3>2023</h3>
+                    <p>12th Passout</p>
+                </div>
+            </div>
+
+            <div class="timeline-item stage-code" data-depth="0.22">
+                <div class="timeline-icon">07</div>
+                <div class="content">
+                    <span class="stage-chip">Web Dev</span>
+                    <h3>2023</h3>
+                    <p>Industrial Training - TechSpeak, Sangli</p>
+                    <p>Web Development</p>
+                </div>
+            </div>
+
+            <div class="timeline-item stage-college" data-depth="0.18">
+                <div class="timeline-icon">08</div>
+                <div class="content">
+                    <span class="stage-chip">B.Tech</span>
+                    <h3>2023 - 2026</h3>
+                    <p>B.Tech in Computer Engineering</p>
+                    <p>D.Y. Patil Agriculture &amp; Technical University, Kolhapur</p>
+                </div>
+            </div>
+
+            <div class="timeline-item stage-internship" data-depth="0.24">
+                <div class="timeline-icon">09</div>
+                <div class="content">
+                    <span class="stage-chip">Internship</span>
+                    <h3>Feb 2025 - Aug 2025</h3>
+                    <p>Internship - FutureMing Infotech</p>
+                    <p>Role: Python Developer</p>
+                </div>
+            </div>
+
+            <div class="timeline-item stage-current current-stage" data-depth="0.28">
+                <div class="timeline-icon">10</div>
+                <div class="content">
+                    <span class="stage-chip">Current</span>
+                    <h3>Aug 2025 - Present</h3>
+                    <p>Data Science Intern - Fourise Software Solutions, Pune</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="next-goal" class="goal-card" data-depth="0.18">
+            <p class="journey-kicker">Next Goal</p>
+            <h2>AI Engineer</h2>
+            <p>Combining backend architecture, data systems, and intelligent product building.</p>
+            <span class="goal-badge">Next Goal: AI Engineer</span>
+        </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/journey.js') }}"></script>
+</body>
+</html>

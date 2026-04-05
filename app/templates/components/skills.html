@@ -1,0 +1,56 @@
+<section id="skills" class="content-section">
+    <div class="section-heading">
+        <p class="eyebrow">The Tech Stack Dependencies</p>
+        <h2>Depth, not just a list</h2>
+    </div>
+    <div class="dependency-grid">
+        {% if skills %}
+            {% for category, items in skills|groupby('category') %}
+            <article class="card">
+                <h3>{{ category or "General" }}</h3>
+                <div class="chip-wrap">
+                    {% for skill in items %}
+                    <span class="chip">{{ skill.name }}</span>
+                    {% endfor %}
+                </div>
+            </article>
+            {% endfor %}
+        {% else %}
+            <article class="card">
+                <h3>Languages</h3>
+                <div class="chip-wrap">
+                    <span class="chip">Python (Advanced)</span>
+                    <span class="chip">JavaScript</span>
+                    <span class="chip">SQL</span>
+                </div>
+            </article>
+            <article class="card">
+                <h3>Backend</h3>
+                <div class="chip-wrap">
+                    <span class="chip">Node.js</span>
+                    <span class="chip">Django</span>
+                    <span class="chip">Flask</span>
+                    <span class="chip">FastAPI</span>
+                </div>
+            </article>
+            <article class="card">
+                <h3>Data &amp; AI</h3>
+                <div class="chip-wrap">
+                    <span class="chip">YOLOv8</span>
+                    <span class="chip">TensorFlow</span>
+                    <span class="chip">MobileNetV2</span>
+                    <span class="chip">Pandas</span>
+                </div>
+            </article>
+            <article class="card">
+                <h3>Cloud / Tools</h3>
+                <div class="chip-wrap">
+                    <span class="chip">Google Cloud</span>
+                    <span class="chip">Vertex AI</span>
+                    <span class="chip">Git</span>
+                    <span class="chip">Docker</span>
+                </div>
+            </article>
+        {% endif %}
+    </div>
+</section>

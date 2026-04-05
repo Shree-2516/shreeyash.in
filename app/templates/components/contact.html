@@ -1,0 +1,20 @@
+<section id="contact" class="content-section contact-panel">
+    <div>
+        <p class="eyebrow">The API Endpoint</p>
+        <h2>Zero friction for recruiters</h2>
+        <p class="hero-text">
+            Clean links, direct context, and one-click resume access so it is easy to reach out.
+        </p>
+    </div>
+    <div class="card contact-json">
+<pre>{
+  "linkedin": "{{ profile.linkedin_url }}",
+  "github": "{{ profile.github_url }}",
+  "email": "{{ profile.email }}",
+  "resume": "{{ profile.resume_url }}"
+}</pre>
+        <div class="hero-actions">
+            <a class="button" href="{{ profile.resume_url }}">Download Resume</a>
+        </div>
+    </div>
+</section>
