@@ -12,6 +12,8 @@ from app.models.portfolio import PortfolioProfile
 from app.models.project import Project
 from app.models.skill import Skill
 from app.models.user import User
+from app.models.education import Education
+from app.models.certificate import Certificate
 
 admin = Blueprint('admin', __name__)
 
@@ -45,8 +47,41 @@ def ensure_project_schema():
         db.session.execute(text("ALTER TABLE project ADD COLUMN github_link VARCHAR(255)"))
     if "tech_stack" not in columns:
         db.session.execute(text("ALTER TABLE project ADD COLUMN tech_stack VARCHAR(255)"))
+    if "slug" not in columns:
+        db.session.execute(text("ALTER TABLE project ADD COLUMN slug VARCHAR(200) UNIQUE"))
+    if "short_description" not in columns:
+        db.session.execute(text("ALTER TABLE project ADD COLUMN short_description TEXT"))
+    if "live_demo_link" not in columns:
+        db.session.execute(text("ALTER TABLE project ADD COLUMN live_demo_link VARCHAR(255)"))
+    if "category" not in columns:
+        db.session.execute(text("ALTER TABLE project ADD COLUMN category VARCHAR(100)"))
+    if "architecture" not in columns:
+        db.session.execute(text("ALTER TABLE project ADD COLUMN architecture TEXT"))
+    if "challenges" not in columns:
+        db.session.execute(text("ALTER TABLE project ADD COLUMN challenges TEXT"))
+    if "key_features" not in columns:
+        db.session.execute(text("ALTER TABLE project ADD COLUMN key_features TEXT"))
+    if "featured_project" not in columns:
+        db.session.execute(text("ALTER TABLE project ADD COLUMN featured_project BOOLEAN DEFAULT FALSE"))
+    if "display_order" not in columns:
+        db.session.execute(text("ALTER TABLE project ADD COLUMN display_order INTEGER DEFAULT 0"))
+    if "project_status" not in columns:
+        db.session.execute(text("ALTER TABLE project ADD COLUMN project_status VARCHAR(50) DEFAULT 'Completed'"))
 
     db.session.commit()
+
+    # Automatically populate missing slugs for existing projects
+    from app.models.project import Project
+    projects_without_slug = Project.query.filter(Project.slug == None).all()
+    if projects_without_slug:
+        import re
+        for p in projects_without_slug:
+            slug = re.sub(r'[^a-z0-9]+', '-', p.title.lower()).strip('-')
+            exists = Project.query.filter_by(slug=slug).first()
+            if exists:
+                slug = f"{slug}-{p.id}"
+            p.slug = slug
+        db.session.commit()
 
 
 def allowed_file(filename):
@@ -91,6 +126,41 @@ def login():
     return render_template("admin/login.html")
 
 
+@admin.route("/register", methods=["GET", "POST"])
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for("admin.dashboard"))
+
+    if request.method == "POST":
+        username = request.form.get("username", "").strip()
+        password = request.form.get("password", "")
+        confirm_password = request.form.get("confirm_password", "")
+
+        if not username or not password:
+            flash("Username and password are required.", "error")
+            return render_template("admin/register.html")
+
+        if password != confirm_password:
+            flash("Passwords do not match.", "error")
+            return render_template("admin/register.html")
+
+        existing_user = User.query.filter_by(username=username).first()
+        if existing_user:
+            flash("Username already exists.", "error")
+            return render_template("admin/register.html")
+
+        # Create new admin user
+        new_admin = User(username=username, is_admin=True)
+        new_admin.set_password(password)
+        db.session.add(new_admin)
+        db.session.commit()
+
+        flash("Admin account created successfully. Please sign in.", "success")
+        return redirect(url_for("admin.login"))
+
+    return render_template("admin/register.html")
+
+
 @admin.route("/logout", methods=["POST"])
 @login_required
 def logout():
@@ -127,12 +197,16 @@ def dashboard():
     projects = Project.query.all()
     skills = Skill.query.order_by(Skill.category.asc(), Skill.name.asc()).all()
     experiences = Experience.query.order_by(Experience.id.desc()).all()
+    educations = Education.query.order_by(Education.display_order.asc(), Education.id.desc()).all()
+    certificates = Certificate.query.order_by(Certificate.display_order.asc(), Certificate.id.desc()).all()
     return render_template(
         "admin/dashboard.html",
         profile=profile,
         projects=projects,
         skills=skills,
         experiences=experiences,
+        educations=educations,
+        certificates=certificates,
     )
 
 @admin.route("/add_project", methods=["GET", "POST"])
@@ -148,8 +222,29 @@ def add_project():
                 return render_template("admin/add_project.html")
             image_filename = save_project_image(image)
 
+        # Generate slug if not provided
+        slug = request.form.get("slug", "").strip()
+        if not slug:
+            import re
+            slug = re.sub(r'[^a-z0-9]+', '-', request.form["title"].lower()).strip('-')
+            base_slug = slug
+            counter = 1
+            while Project.query.filter_by(slug=slug).first():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+
         p = Project(
             title=request.form["title"].strip(),
+            slug=slug,
+            short_description=request.form.get("short_description", "").strip(),
+            live_demo_link=request.form.get("live_demo_link", "").strip(),
+            category=request.form.get("category", "").strip(),
+            architecture=request.form.get("architecture", "").strip(),
+            challenges=request.form.get("challenges", "").strip(),
+            key_features=request.form.get("key_features", "").strip(),
+            featured_project=True if request.form.get("featured_project") == "on" else False,
+            display_order=int(request.form.get("display_order", "0") or 0),
+            project_status=request.form.get("project_status", "Completed").strip(),
             problem=request.form["problem"].strip(),
             solution=request.form["solution"].strip(),
             result=request.form["result"].strip(),
@@ -159,6 +254,19 @@ def add_project():
         )
         db.session.add(p)
         db.session.commit()
+
+        # Handle image gallery uploads
+        from app.models.project import ProjectImage
+        gallery_images = request.files.getlist("gallery_images")
+        for file in gallery_images:
+            if file and file.filename:
+                if allowed_file(file.filename):
+                    filename = save_project_image(file)
+                    if filename:
+                        img = ProjectImage(project_id=p.id, image_filename=filename)
+                        db.session.add(img)
+        db.session.commit()
+
         flash("Project created.", "success")
         return redirect(url_for("admin.dashboard"))
 
@@ -188,12 +296,58 @@ def edit_project(id):
 
             project.image_filename = save_project_image(image)
 
+        # Generate slug if empty
+        slug = request.form.get("slug", "").strip()
+        if not slug:
+            import re
+            slug = re.sub(r'[^a-z0-9]+', '-', request.form["title"].lower()).strip('-')
+            base_slug = slug
+            counter = 1
+            while Project.query.filter(Project.slug == slug, Project.id != project.id).first():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+
         project.title = request.form["title"].strip()
+        project.slug = slug
+        project.short_description = request.form.get("short_description", "").strip()
+        project.live_demo_link = request.form.get("live_demo_link", "").strip()
+        project.category = request.form.get("category", "").strip()
+        project.architecture = request.form.get("architecture", "").strip()
+        project.challenges = request.form.get("challenges", "").strip()
+        project.key_features = request.form.get("key_features", "").strip()
+        project.featured_project = True if request.form.get("featured_project") == "on" else False
+        project.display_order = int(request.form.get("display_order", "0") or 0)
+        project.project_status = request.form.get("project_status", "Completed").strip()
         project.tech_stack = request.form.get("tech_stack", "").strip()
         project.github_link = request.form.get("github_link", "").strip()
         project.problem = request.form["problem"].strip()
         project.solution = request.form["solution"].strip()
         project.result = request.form["result"].strip()
+
+        # Handle image gallery deletions
+        from app.models.project import ProjectImage
+        delete_ids = request.form.getlist("delete_images")
+        for img_id in delete_ids:
+            img = db.session.get(ProjectImage, int(img_id))
+            if img:
+                file_path = os.path.join(current_app.config["UPLOAD_FOLDER"], img.image_filename)
+                if os.path.exists(file_path):
+                    try:
+                        os.remove(file_path)
+                    except Exception as e:
+                        print(f"Error removing gallery image: {e}")
+                db.session.delete(img)
+
+        # Handle new image gallery uploads
+        gallery_images = request.files.getlist("gallery_images")
+        for file in gallery_images:
+            if file and file.filename:
+                if allowed_file(file.filename):
+                    filename = save_project_image(file)
+                    if filename:
+                        img = ProjectImage(project_id=project.id, image_filename=filename)
+                        db.session.add(img)
+
         db.session.commit()
         flash("Project updated.", "success")
         return redirect(url_for("admin.dashboard"))
@@ -280,3 +434,154 @@ def delete(id):
     db.session.commit()
     flash("Project deleted.", "info")
     return redirect(url_for("admin.dashboard"))
+
+
+@admin.route("/education/add", methods=["GET", "POST"])
+@login_required
+def add_education():
+    if request.method == "POST":
+        edu = Education(
+            education_type=request.form.get("education_type", "").strip(),
+            institution=request.form.get("institution", "").strip(),
+            program=request.form.get("program", "").strip(),
+            specialization=request.form.get("specialization", "").strip(),
+            start_year=request.form.get("start_year", "").strip(),
+            end_year=request.form.get("end_year", "").strip(),
+            current_education=True if request.form.get("current_education") == "on" else False,
+            description=request.form.get("description", "").strip(),
+            display_order=int(request.form.get("display_order", "0") or 0),
+            featured=True if request.form.get("featured") == "on" else False
+        )
+        db.session.add(edu)
+        db.session.commit()
+        flash("Education entry added successfully.", "success")
+        return redirect(url_for("admin.dashboard") + "#education")
+    return render_template("admin/add_education.html")
+
+
+@admin.route("/education/edit/<int:id>", methods=["GET", "POST"])
+@login_required
+def edit_education(id):
+    edu = db.session.get(Education, id)
+    if edu is None:
+        flash("Education record not found.", "error")
+        return redirect(url_for("admin.dashboard") + "#education")
+
+    if request.method == "POST":
+        edu.education_type = request.form.get("education_type", "").strip()
+        edu.institution = request.form.get("institution", "").strip()
+        edu.program = request.form.get("program", "").strip()
+        edu.specialization = request.form.get("specialization", "").strip()
+        edu.start_year = request.form.get("start_year", "").strip()
+        edu.end_year = request.form.get("end_year", "").strip()
+        edu.current_education = True if request.form.get("current_education") == "on" else False
+        edu.description = request.form.get("description", "").strip()
+        edu.display_order = int(request.form.get("display_order", "0") or 0)
+        edu.featured = True if request.form.get("featured") == "on" else False
+
+        db.session.commit()
+        flash("Education record updated successfully.", "success")
+        return redirect(url_for("admin.dashboard") + "#education")
+
+    return render_template("admin/edit_education.html", education=edu)
+
+
+@admin.route("/education/delete/<int:id>", methods=["POST"])
+@login_required
+def delete_education(id):
+    edu = db.session.get(Education, id)
+    if edu is None:
+        flash("Education record not found.", "error")
+        return redirect(url_for("admin.dashboard") + "#education")
+
+    db.session.delete(edu)
+    db.session.commit()
+    flash("Education record deleted.", "info")
+    return redirect(url_for("admin.dashboard") + "#education")
+
+
+@admin.route("/certificate/add", methods=["GET", "POST"])
+@login_required
+def add_certificate():
+    if request.method == "POST":
+        image = request.files.get("image")
+        image_filename = None
+        if image and image.filename:
+            if allowed_file(image.filename):
+                image_filename = save_project_image(image)
+
+        cert = Certificate(
+            name=request.form.get("name", "").strip(),
+            organization=request.form.get("organization", "").strip(),
+            issue_date=request.form.get("issue_date", "").strip(),
+            credential_id=request.form.get("credential_id", "").strip(),
+            credential_url=request.form.get("credential_url", "").strip(),
+            skills_covered=request.form.get("skills_covered", "").strip(),
+            featured=True if request.form.get("featured") == "on" else False,
+            display_order=int(request.form.get("display_order", "0") or 0),
+            image_filename=image_filename
+        )
+        db.session.add(cert)
+        db.session.commit()
+        flash("Certificate added successfully.", "success")
+        return redirect(url_for("admin.dashboard") + "#certificates")
+    return render_template("admin/add_certificate.html")
+
+
+@admin.route("/certificate/edit/<int:id>", methods=["GET", "POST"])
+@login_required
+def edit_certificate(id):
+    cert = db.session.get(Certificate, id)
+    if cert is None:
+        flash("Certificate not found.", "error")
+        return redirect(url_for("admin.dashboard") + "#certificates")
+
+    if request.method == "POST":
+        image = request.files.get("image")
+        if image and image.filename:
+            if allowed_file(image.filename):
+                if cert.image_filename:
+                    old_path = os.path.join(current_app.config["UPLOAD_FOLDER"], cert.image_filename)
+                    if os.path.exists(old_path):
+                        try:
+                            os.remove(old_path)
+                        except Exception as e:
+                            print(f"Error removing old cert image: {e}")
+                cert.image_filename = save_project_image(image)
+
+        cert.name = request.form.get("name", "").strip()
+        cert.organization = request.form.get("organization", "").strip()
+        cert.issue_date = request.form.get("issue_date", "").strip()
+        cert.credential_id = request.form.get("credential_id", "").strip()
+        cert.credential_url = request.form.get("credential_url", "").strip()
+        cert.skills_covered = request.form.get("skills_covered", "").strip()
+        cert.featured = True if request.form.get("featured") == "on" else False
+        cert.display_order = int(request.form.get("display_order", "0") or 0)
+
+        db.session.commit()
+        flash("Certificate updated successfully.", "success")
+        return redirect(url_for("admin.dashboard") + "#certificates")
+
+    return render_template("admin/edit_certificate.html", certificate=cert)
+
+
+@admin.route("/certificate/delete/<int:id>", methods=["POST"])
+@login_required
+def delete_certificate(id):
+    cert = db.session.get(Certificate, id)
+    if cert is None:
+        flash("Certificate not found.", "error")
+        return redirect(url_for("admin.dashboard") + "#certificates")
+
+    if cert.image_filename:
+        image_path = os.path.join(current_app.config["UPLOAD_FOLDER"], cert.image_filename)
+        if os.path.exists(image_path):
+            try:
+                os.remove(image_path)
+            except Exception as e:
+                print(f"Error deleting cert image file: {e}")
+
+    db.session.delete(cert)
+    db.session.commit()
+    flash("Certificate deleted.", "info")
+    return redirect(url_for("admin.dashboard") + "#certificates")

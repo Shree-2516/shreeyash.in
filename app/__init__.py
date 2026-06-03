@@ -22,6 +22,8 @@ def create_app(include_main=True, include_admin=True, admin_prefix="/admin"):
     from .models.experience import Experience
     from .models.skill import Skill
     from .models.portfolio import PortfolioProfile
+    from .models.education import Education
+    from .models.certificate import Certificate
 
     os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
 

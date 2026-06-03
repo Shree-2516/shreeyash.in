@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main class="page-shell">
+    <section class="admin-shell">
+        <p class="eyebrow">Admin / Edit Education</p>
+        <h2>Edit Education Entry</h2>
+        <p class="hero-text">Modify details of your academic record.</p>
+
+        <form class="admin-form" action="{{ url_for('admin.edit_education', id=education.id) }}" method="post">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;">
+                <div>
+                    <label for="education_type">Education Type</label>
+                    <select id="education_type" name="education_type" required>
+                        <option value="SSC" {% if education.education_type == 'SSC' %}selected{% endif %}>SSC (School)</option>
+                        <option value="HSC" {% if education.education_type == 'HSC' %}selected{% endif %}>HSC (Junior College)</option>
+                        <option value="Diploma" {% if education.education_type == 'Diploma' %}selected{% endif %}>Diploma</option>
+                        <option value="Degree" {% if education.education_type == 'Degree' %}selected{% endif %}>Degree (B.Tech / B.E.)</option>
+                        <option value="Master's" {% if education.education_type == "Master's" %}selected{% endif %}>Master's</option>
+                        <option value="Other" {% if education.education_type == 'Other' %}selected{% endif %}>Other</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="institution">Institution / University</label>
+                    <input id="institution" name="institution" type="text" value="{{ education.institution }}" required>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;">
+                <div>
+                    <label for="program">Program / Degree Name</label>
+                    <input id="program" name="program" type="text" value="{{ education.program or '' }}">
+                </div>
+                <div>
+                    <label for="specialization">Specialization / Department</label>
+                    <input id="specialization" name="specialization" type="text" value="{{ education.specialization or '' }}">
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+                <div>
+                    <label for="start_year">Start Year</label>
+                    <input id="start_year" name="start_year" type="text" value="{{ education.start_year or '' }}">
+                </div>
+                <div>
+                    <label for="end_year">End Year (or Expected)</label>
+                    <input id="end_year" name="end_year" type="text" value="{{ education.end_year or '' }}">
+                </div>
+                <div>
+                    <label for="display_order">Display Order</label>
+                    <input id="display_order" name="display_order" type="number" value="{{ education.display_order }}">
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 24px; margin: 12px 0;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <input id="current_education" name="current_education" type="checkbox" style="width: auto;" {% if education.current_education %}checked{% endif %}>
+                    <label for="current_education" style="margin: 0; cursor: pointer;">Currently studying here</label>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <input id="featured" name="featured" type="checkbox" style="width: auto;" {% if education.featured %}checked{% endif %}>
+                    <label for="featured" style="margin: 0; cursor: pointer;">Feature on homepage</label>
+                </div>
+            </div>
+
+            <label for="description">Description / Coursework / Highlights</label>
+            <textarea id="description" name="description" rows="5">{{ education.description or '' }}</textarea>
+
+            <div class="admin-actions">
+                <button class="button" type="submit">Update Education</button>
+                <a class="button button-secondary" href="{{ url_for('admin.dashboard') }}#education">Cancel</a>
+            </div>
+        </form>
+    </section>
+</main>
+{% endblock %}

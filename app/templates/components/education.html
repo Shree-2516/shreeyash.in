@@ -1,23 +1,68 @@
-<section class="content-section">
+<section id="education" class="content-section">
     <div class="section-heading">
-        <p class="eyebrow">The System Log</p>
-        <h2>Education &amp; achievements</h2>
+        <p class="eyebrow">Academic Journey</p>
+        <h2>Education</h2>
     </div>
-    <div class="info-grid">
-        <article class="card">
-            <h3>Education</h3>
-            <p><b>Degree:</b> {{ profile.degree }}</p>
-            <p><b>University:</b> {{ profile.university }}</p>
-            <p><b>Key Coursework:</b></p>
-            {% for item in profile.coursework.splitlines() if item.strip() %}
-            <p class="muted">{{ item.strip() }}</p>
+
+    <div class="education-grid">
+        {% set featured_edus = [] %}
+        {% for edu in educations %}
+            {% if edu.featured %}
+                {% if featured_edus.append(edu) %}{% endif %}
+            {% endif %}
+        {% endfor %}
+
+        {% if educations %}
+            {% set edus_to_show = featured_edus if featured_edus|length > 0 else educations %}
+            {% for edu in edus_to_show %}
+                <article class="card education-card">
+                    <span class="education-badge">{{ edu.education_type }}</span>
+                    <h3>{{ edu.program or edu.education_type }}</h3>
+                    {% if edu.specialization %}
+                        <p class="education-spec">{{ edu.specialization }}</p>
+                    {% endif %}
+                    <p class="education-university">{{ edu.institution }}</p>
+                    <span class="education-duration">
+                        {{ edu.start_year }} - 
+                        {% if edu.current_education %}
+                            Present
+                        {% else %}
+                            {{ edu.end_year }}
+                        {% endif %}
+                    </span>
+                    {% if edu.description %}
+                        <div class="education-desc" style="white-space: pre-line;">{{ edu.description }}</div>
+                    {% endif %}
+                </article>
             {% endfor %}
-        </article>
-        <article class="card">
-            <h3>Achievements</h3>
-            {% for item in profile.achievements.splitlines() if item.strip() %}
-            <p>{{ item.strip() }}</p>
-            {% endfor %}
-        </article>
+        {% else %}
+            <!-- Fallback Mock Data -->
+            <article class="card education-card">
+                <span class="education-badge">Degree</span>
+                <h3>B.Tech Computer Engineering</h3>
+                <p class="education-spec">Specialization in AI &amp; Software Systems</p>
+                <p class="education-university">D.Y. Patil Agricultural and Technical University</p>
+                <span class="education-duration">2023 - 2026 (Expected)</span>
+                <div class="education-desc">Focused on Advanced Algorithms, Machine Learning, Database Management, and Cloud Architectures.</div>
+            </article>
+
+            <article class="card education-card">
+                <span class="education-badge">Diploma</span>
+                <h3>Diploma in Computer Science Engineering</h3>
+                <p class="education-spec">MSBTE Board</p>
+                <p class="education-university">Government Polytechnic</p>
+                <span class="education-duration">2020 - 2023</span>
+                <div class="education-desc">Foundational training in Computer Systems, C/C++ programming, Networks, and Operating Systems.</div>
+            </article>
+
+            <article class="card education-card">
+                <span class="education-badge">School</span>
+                <h3>SSC (Secondary School Certificate)</h3>
+                <p class="education-spec">General Science &amp; Mathematics</p>
+                <p class="education-university">State Board School</p>
+                <span class="education-duration">Completed 2020</span>
+                <div class="education-desc">Completed high school with high academic standing and focused core science/math classes.</div>
+            </article>
+        {% endif %}
     </div>
 </section>

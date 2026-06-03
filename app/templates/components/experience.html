@@ -1,42 +1,55 @@
-<section class="content-section">
+<section id="experience" class="content-section">
     <div class="section-heading">
-        <p class="eyebrow">The Git Log</p>
-        <h2>Professional growth</h2>
+        <p class="eyebrow">Professional History</p>
+        <h2>Experience</h2>
     </div>
 
-    <div class="git-timeline">
-        <div class="timeline-rail"></div>
+    <div class="experience-timeline">
         {% if experiences %}
-            {% for experience in experiences %}
-            <article class="card timeline-item">
+            {% for exp in experiences %}
+            <div class="timeline-item">
                 <span class="timeline-dot"></span>
-                <p class="timeline-tag">{% if loop.first %}HEAD - current{% else %}commit-{{ experience.id }}{% endif %}</p>
-                <h3>{{ experience.role }}</h3>
-                <p class="muted">{{ experience.company }}</p>
-                <p>{{ experience.description }}</p>
-            </article>
+                <div class="timeline-header">
+                    <div>
+                        <h3>{{ exp.role }}</h3>
+                        <span class="timeline-company">{{ exp.company }}</span>
+                    </div>
+                    <span class="timeline-duration">{% if loop.first %}Aug 2025 – Present{% else %}Past Role{% endif %}</span>
+                </div>
+                <div class="timeline-content">
+                    {% if '\n' in exp.description %}
+                    <ul>
+                        {% for line in exp.description.split('\n') if line.strip() %}
+                        <li>{{ line.strip().lstrip('-').lstrip('•').strip() }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p>{{ exp.description }}</p>
+                    {% endif %}
+                </div>
+            </div>
             {% endfor %}
         {% else %}
-            <article class="card timeline-item">
+            <!-- Mock Current Role -->
+            <div class="timeline-item">
                 <span class="timeline-dot"></span>
-                <p class="timeline-tag">HEAD - current</p>
-                <h3>Data Science Intern</h3>
-                <p class="muted">Current role</p>
-                <p>
-                    Working on pipeline optimization, model-serving workflows, and turning data-heavy
-                    experimentation into reliable outputs.
-                </p>
-            </article>
-            <article class="card timeline-item">
-                <span class="timeline-dot"></span>
-                <p class="timeline-tag">feature / mern-foundation</p>
-                <h3>Software Engineer Background</h3>
-                <p class="muted">Full-stack and backend engineering</p>
-                <p>
-                    Strong MERN-stack grounding combined with Python backend work across APIs,
-                    dashboards, authentication, databases, and project deployment structures.
-                </p>
-            </article>
+                <div class="timeline-header">
+                    <div>
+                        <h3>Data Science Intern</h3>
+                        <span class="timeline-company">Fourise Software Solutions Pvt Ltd</span>
+                    </div>
+                    <span class="timeline-duration">Aug 2025 – Present</span>
+                </div>
+                <div class="timeline-content">
+                    <ul>
+                        <li>Built YOLOv8-based computer vision systems.</li>
+                        <li>Developed automated web scraping pipelines.</li>
+                        <li>Processed and cleaned large-scale datasets.</li>
+                        <li>Created admin workflow automation systems.</li>
+                        <li>Worked on production-level software projects.</li>
+                    </ul>
+                </div>
+            </div>
         {% endif %}
     </div>
 </section>

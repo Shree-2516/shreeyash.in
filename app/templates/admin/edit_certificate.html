@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main class="page-shell">
+    <section class="admin-shell">
+        <p class="eyebrow">Admin / Edit Certificate</p>
+        <h2>Edit Certificate Entry</h2>
+        <p class="hero-text">Modify credentials, issue organizations, and skills covered for the recruiter validation grid.</p>
+
+        <form class="admin-form" action="{{ url_for('admin.edit_certificate', id=certificate.id) }}" method="post" enctype="multipart/form-data">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;">
+                <div>
+                    <label for="name">Certificate Name</label>
+                    <input id="name" name="name" type="text" value="{{ certificate.name }}" required>
+                </div>
+                <div>
+                    <label for="organization">Issuing Organization</label>
+                    <input id="organization" name="organization" type="text" value="{{ certificate.organization }}" required>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+                <div>
+                    <label for="issue_date">Issue Date</label>
+                    <input id="issue_date" name="issue_date" type="text" value="{{ certificate.issue_date or '' }}">
+                </div>
+                <div>
+                    <label for="display_order">Display Order</label>
+                    <input id="display_order" name="display_order" type="number" value="{{ certificate.display_order }}">
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;">
+                <div>
+                    <label for="credential_id">Credential ID</label>
+                    <input id="credential_id" name="credential_id" type="text" value="{{ certificate.credential_id or '' }}">
+                </div>
+                <div>
+                    <label for="credential_url">Credential URL</label>
+                    <input id="credential_url" name="credential_url" type="text" value="{{ certificate.credential_url or '' }}">
+                </div>
+            </div>
+
+            <div>
+                <label for="skills_covered">Skills Covered (comma separated)</label>
+                <input id="skills_covered" name="skills_covered" type="text" value="{{ certificate.skills_covered or '' }}">
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 10px; margin: 8px 0;">
+                <input id="featured" name="featured" type="checkbox" style="width: auto;" {% if certificate.featured %}checked{% endif %}>
+                <label for="featured" style="margin: 0; cursor: pointer;">Feature this certificate on the homepage</label>
+            </div>
+
+            <div style="display: flex; gap: 20px; align-items: start; margin-top: 10px;">
+                {% if certificate.image_filename %}
+                <div>
+                    <p style="margin: 0 0 6px 0; font-size: 0.85rem; color: var(--text-sec);">Current Badge:</p>
+                    <img src="{{ certificate.image_url }}" alt="Cert Badge" style="max-width: 120px; border-radius: 6px; border: 1px solid var(--card-border);">
+                </div>
+                {% endif %}
+                <div style="flex: 1;">
+                    <label for="image">Upload New Badge / Image (Replaces current)</label>
+                    <input id="image" name="image" type="file" accept=".png,.jpg,.jpeg,.gif,.webp">
+                </div>
+            </div>
+
+            <div class="admin-actions">
+                <button class="button" type="submit">Update Certificate</button>
+                <a class="button button-secondary" href="{{ url_for('admin.dashboard') }}#certificates">Cancel</a>
+            </div>
+        </form>
+    </section>
+</main>
+{% endblock %}

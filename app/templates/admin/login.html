@@ -14,7 +14,10 @@
             <label for="password">Password</label>
             <input id="password" name="password" type="password" required>
 
-            <button class="button" type="submit">Sign In</button>
+            <div class="admin-actions">
+                <button class="button" type="submit">Sign In</button>
+                <a class="button button-secondary" href="{{ url_for('admin.register') }}">Register Admin</a>
+            </div>
         </form>
     </section>
 </main>

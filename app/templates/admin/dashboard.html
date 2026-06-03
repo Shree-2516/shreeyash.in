@@ -1,195 +1,628 @@
 {% extends "base.html" %}
 
 {% block content %}
-<main class="page-shell admin-page">
-    <section class="admin-toolbar card">
-        <div>
-            <p class="eyebrow">Admin Dashboard</p>
-            <h1 class="admin-title">Manage Portfolio Data</h1>
+<div class="admin-cms-layout">
+    <!-- Left Sidebar -->
+    <aside class="admin-sidebar">
+        <div class="sidebar-brand">
+            <span class="brand-text">{{ profile.name }}</span>
+            <span class="brand-sub">CMS Control Panel</span>
         </div>
-        <div class="admin-actions">
-            <form action="{{ url_for('admin.logout') }}" method="post">
-                <button class="button button-secondary" type="submit">Logout</button>
+        
+        <nav class="sidebar-menu">
+            <a href="#dashboard" class="menu-item active" data-tab="dashboard">
+                <span class="menu-icon">📊</span> Dashboard
+            </a>
+            <a href="#profile" class="menu-item" data-tab="profile">
+                <span class="menu-icon">👤</span> Profile
+            </a>
+            <a href="#projects" class="menu-item" data-tab="projects">
+                <span class="menu-icon">💻</span> Projects
+            </a>
+            <a href="#experience" class="menu-item" data-tab="experience">
+                <span class="menu-icon">💼</span> Experience
+            </a>
+            <a href="#skills" class="menu-item" data-tab="skills">
+                <span class="menu-icon">🛠️</span> Skills
+            </a>
+            <a href="#education" class="menu-item" data-tab="education">
+                <span class="menu-icon">🎓</span> Education
+            </a>
+            <a href="#certificates" class="menu-item" data-tab="certificates">
+                <span class="menu-icon">📜</span> Certificates
+            </a>
+            <a href="#settings" class="menu-item" data-tab="settings">
+                <span class="menu-icon">⚙️</span> Settings
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <form action="{{ url_for('admin.logout') }}" method="post" style="width: 100%;">
+                <button type="submit" class="logout-btn">
+                    <span class="menu-icon">🚪</span> Logout
+                </button>
             </form>
         </div>
-    </section>
+    </aside>
 
-    <nav class="admin-nav card">
-        <a href="#profile">Profile</a>
-        <a href="#skills">Skills</a>
-        <a href="#experience">Experience</a>
-        <a href="#projects">Projects</a>
-    </nav>
-
-    <section id="profile" class="admin-shell">
-        <div class="admin-header">
-            <div>
-                <p class="eyebrow">Profile</p>
-                <h2>Hero, about, contact</h2>
+    <!-- Main Content Area -->
+    <main class="admin-main-content">
+        <!-- 1. DASHBOARD VIEW -->
+        <section id="tab-dashboard" class="tab-pane active">
+            <div class="section-heading" style="text-align: left; margin-bottom: 32px;">
+                <p class="eyebrow">CMS Overview</p>
+                <h2>Console Metrics</h2>
             </div>
-        </div>
 
-        <form class="admin-form admin-grid-form" action="{{ url_for('admin.dashboard') }}" method="post">
-            <label for="name">Name</label>
-            <input id="name" name="name" type="text" value="{{ profile.name }}" required>
-
-            <label for="tagline">Tagline</label>
-            <input id="tagline" name="tagline" type="text" value="{{ profile.tagline }}" required>
-
-            <label for="location">Location</label>
-            <input id="location" name="location" type="text" value="{{ profile.location }}">
-
-            <label for="internship_status">Internship Count</label>
-            <input id="internship_status" name="internship_status" type="text" value="{{ profile.internship_status }}">
-
-            <label for="leetcode_summary">LeetCode Count</label>
-            <input id="leetcode_summary" name="leetcode_summary" type="text" value="{{ profile.leetcode_summary }}">
-
-            <label for="tech_stack_summary">Tech Stack Summary</label>
-            <input id="tech_stack_summary" name="tech_stack_summary" type="text" value="{{ profile.tech_stack_summary }}">
-
-            <label for="about_summary">About Summary</label>
-            <textarea id="about_summary" name="about_summary" rows="5">{{ profile.about_summary }}</textarea>
-
-            <label for="resume_url">Resume URL</label>
-            <input id="resume_url" name="resume_url" type="text" value="{{ profile.resume_url }}">
-
-            <label for="linkedin_url">LinkedIn</label>
-            <input id="linkedin_url" name="linkedin_url" type="text" value="{{ profile.linkedin_url }}">
-
-            <label for="github_url">GitHub</label>
-            <input id="github_url" name="github_url" type="text" value="{{ profile.github_url }}">
-
-            <label for="email">Email</label>
-            <input id="email" name="email" type="email" value="{{ profile.email }}">
-
-            <label for="degree">Degree</label>
-            <input id="degree" name="degree" type="text" value="{{ profile.degree }}">
-
-            <label for="university">University</label>
-            <input id="university" name="university" type="text" value="{{ profile.university }}">
-
-            <label for="coursework">Coursework</label>
-            <textarea id="coursework" name="coursework" rows="4">{{ profile.coursework }}</textarea>
-
-            <label for="achievements">Achievements</label>
-            <textarea id="achievements" name="achievements" rows="4">{{ profile.achievements }}</textarea>
-
-            <div class="admin-actions">
-                <button class="button" type="submit">Save Profile</button>
-            </div>
-        </form>
-    </section>
-
-    <section id="skills" class="admin-shell">
-        <div class="admin-header">
-            <div>
-                <p class="eyebrow">Skills</p>
-                <h2>Add or remove skills</h2>
-            </div>
-        </div>
-
-        <form class="admin-form admin-inline-form" action="{{ url_for('admin.add_skill') }}" method="post">
-            <select name="category" required>
-                <option value="Backend">Backend</option>
-                <option value="AI">AI</option>
-                <option value="Cloud">Cloud</option>
-                <option value="Language">Language</option>
-            </select>
-            <input name="name" type="text" placeholder="Skill name" required>
-            <button class="button" type="submit">Add Skill</button>
-        </form>
-
-        <div class="admin-grid">
-            {% for skill in skills %}
-            <article class="card">
-                <h3>{{ skill.name }}</h3>
-                <p class="muted">{{ skill.category }}</p>
-                <form action="{{ url_for('admin.delete_skill', id=skill.id) }}" method="post">
-                    <button class="delete-link delete-button" type="submit">Delete</button>
-                </form>
-            </article>
-            {% else %}
-            <article class="card empty-card">
-                <h3>No skills yet</h3>
-            </article>
-            {% endfor %}
-        </div>
-    </section>
-
-    <section id="experience" class="admin-shell">
-        <div class="admin-header">
-            <div>
-                <p class="eyebrow">Experience</p>
-                <h2>Timeline entries</h2>
-            </div>
-        </div>
-
-        <form class="admin-form" action="{{ url_for('admin.add_experience') }}" method="post">
-            <label for="role">Role</label>
-            <input id="role" name="role" type="text" required>
-
-            <label for="company">Company</label>
-            <input id="company" name="company" type="text">
-
-            <label for="impact">Impact</label>
-            <textarea id="impact" name="impact" rows="4" required></textarea>
-
-            <div class="admin-actions">
-                <button class="button" type="submit">Add Experience</button>
-            </div>
-        </form>
-
-        <div class="admin-grid">
-            {% for experience in experiences %}
-            <article class="card">
-                <h3>{{ experience.role }}</h3>
-                <p class="muted">{{ experience.company }}</p>
-                <p>{{ experience.description }}</p>
-                <form action="{{ url_for('admin.delete_experience', id=experience.id) }}" method="post">
-                    <button class="delete-link delete-button" type="submit">Delete</button>
-                </form>
-            </article>
-            {% else %}
-            <article class="card empty-card">
-                <h3>No experience entries yet</h3>
-            </article>
-            {% endfor %}
-        </div>
-    </section>
-
-    <section id="projects" class="admin-shell">
-        <div class="admin-header">
-            <div>
-                <p class="eyebrow">Projects</p>
-                <h2>Full project CRUD</h2>
-            </div>
-            <a class="button" href="{{ url_for('admin.add_project') }}">Add Project</a>
-        </div>
-
-        <div class="admin-grid">
+            <!-- Summary Statistics Grid -->
+            {% set featured_count = namespace(value=0) %}
             {% for p in projects %}
-            <article class="card project-card">
-                {% if p.image_url %}
-                <img class="project-image" src="{{ p.image_url }}" alt="{{ p.title }}">
+                {% if p.featured_project %}
+                    {% set featured_count.value = featured_count.value + 1 %}
                 {% endif %}
-                <h3>{{ p.title }}</h3>
-                <p><b>Tech Stack:</b> {{ p.tech_stack or "-" }}</p>
-                <p><b>GitHub:</b> {{ p.github_link or "-" }}</p>
-                <p><b>Problem:</b> {{ p.problem }}</p>
-                <p><b>Solution:</b> {{ p.solution }}</p>
-                <p><b>Result:</b> {{ p.result }}</p>
-                <a class="button button-secondary" href="{{ url_for('admin.edit_project', id=p.id) }}">Edit</a>
-                <form action="{{ url_for('admin.delete', id=p.id) }}" method="post">
-                    <button class="delete-link delete-button" type="submit">Delete</button>
-                </form>
-            </article>
-            {% else %}
-            <article class="card empty-card">
-                <h3>No projects yet</h3>
-            </article>
             {% endfor %}
-        </div>
-    </section>
-</main>
+
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <span class="summary-number">{{ projects|length }}</span>
+                    <span class="summary-label">Total Projects</span>
+                </div>
+                <div class="summary-card">
+                    <span class="summary-number">{{ skills|length }}</span>
+                    <span class="summary-label">Total Skills</span>
+                </div>
+                <div class="summary-card">
+                    <span class="summary-number">{{ experiences|length }}</span>
+                    <span class="summary-label">Total Experiences</span>
+                </div>
+                <div class="summary-card">
+                    <span class="summary-number">{{ educations|length }}</span>
+                    <span class="summary-label">Total Education</span>
+                </div>
+                <div class="summary-card">
+                    <span class="summary-number">{{ certificates|length }}</span>
+                    <span class="summary-label">Total Certificates</span>
+                </div>
+                <div class="summary-card">
+                    <span class="summary-number" style="color: var(--success); font-size: 1.8rem; padding-top: 8px;">Active</span>
+                    <span class="summary-label">Portfolio Status</span>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions-card">
+                <h3>Quick Management Actions</h3>
+                <div class="quick-actions-list">
+                    <a href="{{ url_for('admin.add_project') }}" class="button button-primary">+ Add New Project</a>
+                    <button class="button button-secondary" onclick="switchTab('experience')">+ Add Experience</button>
+                    <button class="button button-secondary" onclick="switchTab('skills')">+ Add Skills</button>
+                    <a href="{{ url_for('admin.add_education') }}" class="button button-secondary">+ Add Education</a>
+                    <a href="{{ url_for('admin.add_certificate') }}" class="button button-secondary">+ Add Certificate</a>
+                    <a href="http://localhost:5000/" target="_blank" class="button button-ghost">🌐 View Live Website</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. PROFILE VIEW -->
+        <section id="tab-profile" class="tab-pane">
+            <div class="section-heading" style="text-align: left; margin-bottom: 32px;">
+                <p class="eyebrow">CMS Editor</p>
+                <h2>Edit Developer Profile</h2>
+            </div>
+
+            <form class="admin-form" action="{{ url_for('admin.dashboard') }}" method="post">
+                <!-- Section 1: Personal Info -->
+                <div class="form-section-card">
+                    <h3>Personal Information</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;">
+                        <div>
+                            <label for="name">Name</label>
+                            <input id="name" name="name" type="text" value="{{ profile.name }}" required>
+                        </div>
+                        <div>
+                            <label for="email">Contact Email</label>
+                            <input id="email" name="email" type="email" value="{{ profile.email }}">
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-top: 16px;">
+                        <div>
+                            <label for="tagline">Tagline / Headline</label>
+                            <input id="tagline" name="tagline" type="text" value="{{ profile.tagline }}" required>
+                        </div>
+                        <div>
+                            <label for="location">Location</label>
+                            <input id="location" name="location" type="text" value="{{ profile.location }}">
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 16px;">
+                        <div>
+                            <label for="resume_url">Resume URL / File path</label>
+                            <input id="resume_url" name="resume_url" type="text" value="{{ profile.resume_url }}">
+                        </div>
+                        <div>
+                            <label for="internship_status">Internships Summary</label>
+                            <input id="internship_status" name="internship_status" type="text" value="{{ profile.internship_status }}">
+                        </div>
+                        <div>
+                            <label for="leetcode_summary">LeetCode Solved</label>
+                            <input id="leetcode_summary" name="leetcode_summary" type="text" value="{{ profile.leetcode_summary }}">
+                        </div>
+                        <div>
+                            <label for="tech_stack_summary">Tech Stack Summary</label>
+                            <input id="tech_stack_summary" name="tech_stack_summary" type="text" value="{{ profile.tech_stack_summary }}">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 2: Social Links -->
+                <div class="form-section-card">
+                    <h3>Social Accounts</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;">
+                        <div>
+                            <label for="github_url">GitHub Profile URL</label>
+                            <input id="github_url" name="github_url" type="text" value="{{ profile.github_url }}">
+                        </div>
+                        <div>
+                            <label for="linkedin_url">LinkedIn Profile URL</label>
+                            <input id="linkedin_url" name="linkedin_url" type="text" value="{{ profile.linkedin_url }}">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 3: About -->
+                <div class="form-section-card">
+                    <h3>About Summary</h3>
+                    <label for="about_summary">Bio / About Me</label>
+                    <textarea id="about_summary" name="about_summary" rows="5" required>{{ profile.about_summary }}</textarea>
+                </div>
+
+                <!-- Section 4: Achievements -->
+                <div class="form-section-card">
+                    <h3>Achievements &amp; Honors</h3>
+                    <label for="achievements">Achievements / Honors (one per line)</label>
+                    <textarea id="achievements" name="achievements" rows="5">{{ profile.achievements }}</textarea>
+                </div>
+
+                <div class="admin-actions">
+                    <button class="button button-primary" type="submit" style="min-width: 160px;">Save Profile Changes</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- 3. PROJECTS VIEW -->
+        <section id="tab-projects" class="tab-pane">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px;">
+                <div class="section-heading" style="text-align: left; margin: 0;">
+                    <p class="eyebrow">CMS Repository</p>
+                    <h2>Manage Project Cards</h2>
+                </div>
+                <a class="button button-primary" href="{{ url_for('admin.add_project') }}">+ Add Project</a>
+            </div>
+
+            <div class="admin-table-container">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Thumbnail</th>
+                            <th>Title</th>
+                            <th>Category</th>
+                            <th>Status</th>
+                            <th>Featured</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for p in projects %}
+                        <tr>
+                            <td>
+                                {% if p.image_filename %}
+                                <img src="{{ p.image_url }}" alt="Thumb" style="width: 50px; height: 35px; object-fit: cover; border-radius: 4px; border: 1px solid var(--card-border);">
+                                {% else %}
+                                <div style="width: 50px; height: 35px; border-radius: 4px; background: linear-gradient(135deg, var(--accent) 0%, var(--accent-sec) 100%);"></div>
+                                {% endif %}
+                            </td>
+                            <td style="font-weight: 600; color: var(--text);">{{ p.title }}</td>
+                            <td>{{ p.category or 'AI Systems' }}</td>
+                            <td>
+                                <span style="font-size: 0.75rem; font-weight: 600; padding: 4px 10px; border-radius: 999px; background-color: var(--bg-sec); border: 1px solid var(--card-border);">
+                                    {{ p.project_status or 'Completed' }}
+                                </span>
+                            </td>
+                            <td>
+                                {% if p.featured_project %}
+                                <span style="color: var(--success); font-weight: 600;">⭐ Yes</span>
+                                {% else %}
+                                <span style="color: var(--text-sec);">No</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div style="display: flex; gap: 12px; align-items: center;">
+                                    <a class="button button-secondary" href="{{ url_for('admin.edit_project', id=p.id) }}" style="padding: 6px 12px; font-size: 0.8rem; min-height: auto;">Edit</a>
+                                    {% if p.slug %}
+                                    <a class="button button-ghost" href="http://localhost:5000/project/{{ p.slug }}" target="_blank" style="padding: 6px 12px; font-size: 0.8rem; min-height: auto;">Preview</a>
+                                    {% endif %}
+                                    <form action="{{ url_for('admin.delete', id=p.id) }}" method="post" onsubmit="return confirm('Are you sure you want to delete this project?');" style="margin: 0;">
+                                        <button class="delete-link" type="submit" style="font-size: 0.8rem; font-weight: 600; padding: 6px 0;">Delete</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="6" style="text-align: center; color: var(--text-sec); padding: 32px;">No projects registered in the database yet.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 4. EXPERIENCE VIEW -->
+        <section id="tab-experience" class="tab-pane">
+            <div class="section-heading" style="text-align: left; margin-bottom: 32px;">
+                <p class="eyebrow">CMS Timeline</p>
+                <h2>Work History</h2>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 32px; align-items: start;">
+                <!-- Add Form -->
+                <div class="form-section-card">
+                    <h3>Add Timeline Entry</h3>
+                    <form class="admin-form" action="{{ url_for('admin.add_experience') }}" method="post">
+                        <label for="role">Role / Job Title</label>
+                        <input id="role" name="role" type="text" placeholder="e.g. Data Science Intern" required>
+
+                        <label for="company" style="margin-top: 8px; display: block;">Company Name</label>
+                        <input id="company" name="company" type="text" placeholder="e.g. Fourise Software Solutions" required>
+
+                        <label for="impact" style="margin-top: 8px; display: block;">Achievements (one per line or paragraph)</label>
+                        <textarea id="impact" name="impact" rows="5" placeholder="- Developed automated scraping workflows&#10;- Built YOLOv8 detection models" required></textarea>
+
+                        <button class="button button-primary" type="submit" style="margin-top: 12px; width: 100%;">Add Entry</button>
+                    </form>
+                </div>
+
+                <!-- Existing entries -->
+                <div>
+                    <h3 style="font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 600; margin-bottom: 16px; color: var(--text-sec);">Current Database Entries</h3>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 16px;">
+                        {% for exp in experiences %}
+                        <div class="card" style="padding: 20px; background-color: var(--card-bg);">
+                            <div style="display: flex; justify-content: space-between; align-items: start;">
+                                <div>
+                                    <h4 style="font-size: 1.1rem; font-weight: 700; color: var(--text);">{{ exp.role }}</h4>
+                                    <span style="font-size: 0.9rem; color: var(--accent-sec); font-weight: 500;">{{ exp.company }}</span>
+                                </div>
+                                <form action="{{ url_for('admin.delete_experience', id=exp.id) }}" method="post" onsubmit="return confirm('Delete this timeline entry?');">
+                                    <button class="delete-link" type="submit" style="font-size: 0.8rem;">Delete</button>
+                                </form>
+                            </div>
+                            <div style="margin-top: 12px; font-size: 0.88rem; color: var(--text-sec); white-space: pre-line;">
+                                {{ exp.description }}
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="card" style="padding: 24px; text-align: center; border-style: dashed; color: var(--text-sec);">
+                            No experiences registered.
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. SKILLS VIEW -->
+        <section id="tab-skills" class="tab-pane">
+            <div class="section-heading" style="text-align: left; margin-bottom: 32px;">
+                <p class="eyebrow">CMS Dependencies</p>
+                <h2>Core Skills</h2>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 32px; align-items: start;">
+                <!-- Tag Input Multi Form -->
+                <div class="form-section-card">
+                    <h3>Add Multiple Skills</h3>
+                    <form class="admin-form" id="skills-form" action="{{ url_for('admin.add_skill') }}" method="post">
+                        <label for="skill_category">Skill Category</label>
+                        <select id="skill_category" name="category" required>
+                            <option value="Backend">Backend</option>
+                            <option value="AI">AI / Machine Learning</option>
+                            <option value="Cloud">Cloud &amp; DevOps</option>
+                            <option value="Language">Language / Tools</option>
+                        </select>
+
+                        <div class="tag-input-container" style="margin-top: 12px;">
+                            <label for="skill_names">Skill Names (Comma separated list)</label>
+                            <input id="skill_names" name="name" type="text" placeholder="e.g. Python, Flask, Django, FastAPI" required>
+                            <span class="tag-input-help">Type comma separated names to insert multiple skills at once.</span>
+                        </div>
+
+                        <button class="button button-primary" type="submit" style="margin-top: 12px; width: 100%;">Save Skills</button>
+                    </form>
+                </div>
+
+                <!-- Existing skills list grouped by category -->
+                <div>
+                    <h3 style="font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 600; margin-bottom: 16px; color: var(--text-sec);">Current Tech Stack</h3>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 20px;">
+                        {% for cat, items in skills|groupby('category') %}
+                        <div class="card" style="padding: 20px;">
+                            <h4 style="font-family: 'Poppins', sans-serif; font-size: 1rem; color: var(--accent-sec); border-bottom: 1px solid var(--card-border); padding-bottom: 6px; margin-bottom: 12px;">
+                                {{ cat or "General" }}
+                            </h4>
+                            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                                {% for skill in items %}
+                                <div style="display: inline-flex; align-items: center; gap: 6px; font-size: 0.8rem; background-color: var(--bg-sec); border: 1px solid var(--card-border); padding: 4px 10px; border-radius: 6px;">
+                                    <span style="color: var(--text); font-weight: 500;">{{ skill.name }}</span>
+                                    <form action="{{ url_for('admin.delete_skill', id=skill.id) }}" method="post" style="margin: 0; display: inline;">
+                                        <button type="submit" style="background: none; border: none; color: var(--danger); font-size: 0.85rem; font-weight: 700; cursor: pointer; padding: 0 2px;">×</button>
+                                    </form>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="card" style="padding: 24px; text-align: center; border-style: dashed; color: var(--text-sec);">
+                            No skills registered.
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. EDUCATION VIEW -->
+        <section id="tab-education" class="tab-pane">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px;">
+                <div class="section-heading" style="text-align: left; margin: 0;">
+                    <p class="eyebrow">CMS Repository</p>
+                    <h2>Manage Education</h2>
+                </div>
+                <a class="button button-primary" href="{{ url_for('admin.add_education') }}">+ Add Education</a>
+            </div>
+
+            <div class="admin-table-container">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Institution</th>
+                            <th>Program/Specialization</th>
+                            <th>Duration</th>
+                            <th>Featured</th>
+                            <th>Order</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for edu in educations %}
+                        <tr>
+                            <td style="font-weight: 600; color: var(--text);">{{ edu.education_type }}</td>
+                            <td>{{ edu.institution }}</td>
+                            <td>{{ edu.program }}{% if edu.specialization %} ({{ edu.specialization }}){% endif %}</td>
+                            <td>
+                                {{ edu.start_year }} - 
+                                {% if edu.current_education %}
+                                    Present
+                                {% else %}
+                                    {{ edu.end_year }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if edu.featured %}
+                                <span style="color: var(--success); font-weight: 600;">⭐ Yes</span>
+                                {% else %}
+                                <span style="color: var(--text-sec);">No</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ edu.display_order }}</td>
+                            <td>
+                                <div style="display: flex; gap: 12px; align-items: center;">
+                                    <a class="button button-secondary" href="{{ url_for('admin.edit_education', id=edu.id) }}" style="padding: 6px 12px; font-size: 0.8rem; min-height: auto;">Edit</a>
+                                    <form action="{{ url_for('admin.delete_education', id=edu.id) }}" method="post" onsubmit="return confirm('Are you sure you want to delete this education entry?');" style="margin: 0;">
+                                        <button class="delete-link" type="submit" style="font-size: 0.8rem; font-weight: 600; padding: 6px 0;">Delete</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="7" style="text-align: center; color: var(--text-sec); padding: 32px;">No education records registered.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 7. CERTIFICATES VIEW -->
+        <section id="tab-certificates" class="tab-pane">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px;">
+                <div class="section-heading" style="text-align: left; margin: 0;">
+                    <p class="eyebrow">CMS Repository</p>
+                    <h2>Manage Certificates</h2>
+                </div>
+                <a class="button button-primary" href="{{ url_for('admin.add_certificate') }}">+ Add Certificate</a>
+            </div>
+
+            <div class="admin-table-container">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Organization</th>
+                            <th>Issue Date</th>
+                            <th>Featured</th>
+                            <th>Order</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for cert in certificates %}
+                        <tr>
+                            <td>
+                                {% if cert.image_filename %}
+                                <img src="{{ cert.image_url }}" alt="Cert" style="width: 50px; height: 35px; object-fit: cover; border-radius: 4px; border: 1px solid var(--card-border);">
+                                {% else %}
+                                <div style="width: 50px; height: 35px; border-radius: 4px; background: linear-gradient(135deg, var(--accent) 0%, var(--accent-sec) 100%);"></div>
+                                {% endif %}
+                            </td>
+                            <td style="font-weight: 600; color: var(--text);">{{ cert.name }}</td>
+                            <td>{{ cert.organization }}</td>
+                            <td>{{ cert.issue_date }}</td>
+                            <td>
+                                {% if cert.featured %}
+                                <span style="color: var(--success); font-weight: 600;">⭐ Yes</span>
+                                {% else %}
+                                <span style="color: var(--text-sec);">No</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ cert.display_order }}</td>
+                            <td>
+                                <div style="display: flex; gap: 12px; align-items: center;">
+                                    <a class="button button-secondary" href="{{ url_for('admin.edit_certificate', id=cert.id) }}" style="padding: 6px 12px; font-size: 0.8rem; min-height: auto;">Edit</a>
+                                    <form action="{{ url_for('admin.delete_certificate', id=cert.id) }}" method="post" onsubmit="return confirm('Are you sure you want to delete this certificate?');" style="margin: 0;">
+                                        <button class="delete-link" type="submit" style="font-size: 0.8rem; font-weight: 600; padding: 6px 0;">Delete</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="7" style="text-align: center; color: var(--text-sec); padding: 32px;">No certificates registered.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 6. SETTINGS VIEW -->
+        <section id="tab-settings" class="tab-pane">
+            <div class="section-heading" style="text-align: left; margin-bottom: 32px;">
+                <p class="eyebrow">CMS Properties</p>
+                <h2>System Settings</h2>
+            </div>
+
+            <div class="form-section-card">
+                <h3>Global Configurations</h3>
+                <p style="color: var(--text-sec); margin-bottom: 20px; font-size: 0.95rem;">
+                    The environment variables defined in your project control local authentication and data connections.
+                </p>
+
+                <div style="display: flex; flex-direction: column; gap: 16px;">
+                    <div style="padding: 14px 16px; border-radius: 8px; background-color: var(--bg-sec); border: 1px solid var(--card-border); display: flex; justify-content: space-between;">
+                        <span style="font-weight: 600; color: var(--text-sec);">PostgreSQL URL</span>
+                        <code style="color: var(--accent-sec); font-size: 0.85rem;">postgresql://postgres:***@localhost:5432/shreeyash.in</code>
+                    </div>
+                    <div style="padding: 14px 16px; border-radius: 8px; background-color: var(--bg-sec); border: 1px solid var(--card-border); display: flex; justify-content: space-between;">
+                        <span style="font-weight: 600; color: var(--text-sec);">Server Listening Status</span>
+                        <span style="color: var(--success); font-weight: 600;">ACTIVE (Debug Mode)</span>
+                    </div>
+                    <div style="padding: 14px 16px; border-radius: 8px; background-color: var(--bg-sec); border: 1px solid var(--card-border); display: flex; justify-content: space-between;">
+                        <span style="font-weight: 600; color: var(--text-sec);">Linter Configuration</span>
+                        <span style="color: var(--accent-sec); font-weight: 600;">Enabled (.venv)</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+
+<script>
+    // Tab switching logic
+    function switchTab(tabId) {
+        // Remove active class from all menu items and tab panes
+        document.querySelectorAll('.sidebar-menu .menu-item').forEach(item => {
+            item.classList.remove('active');
+        });
+        document.querySelectorAll('.admin-main-content .tab-pane').forEach(pane => {
+            pane.classList.remove('active');
+        });
+
+        // Add active class to corresponding menu item and tab pane
+        const targetMenuItem = document.querySelector(`.sidebar-menu .menu-item[data-tab="${tabId}"]`);
+        const targetTabPane = document.getElementById(`tab-${tabId}`);
+
+        if (targetMenuItem && targetTabPane) {
+            targetMenuItem.classList.add('active');
+            targetTabPane.classList.add('active');
+            // Store active tab in localStorage
+            localStorage.setItem('admin_active_tab', tabId);
+            // Update hash
+            window.location.hash = tabId;
+        }
+    }
+
+    // Initialize tabs on DOM Load
+    document.addEventListener("DOMContentLoaded", () => {
+        // Read hash or local storage
+        let activeTab = window.location.hash.substring(1) || localStorage.getItem('admin_active_tab') || 'dashboard';
+        
+        // Allowed tabs list
+        const allowedTabs = ['dashboard', 'profile', 'projects', 'experience', 'skills', 'settings', 'education', 'certificates'];
+        if (!allowedTabs.includes(activeTab)) {
+            activeTab = 'dashboard';
+        }
+
+        switchTab(activeTab);
+
+        // Click listeners on sidebar items
+        document.querySelectorAll('.sidebar-menu .menu-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                const tabId = item.getAttribute('data-tab');
+                switchTab(tabId);
+            });
+        });
+
+        // Intercept skills form submission for tag-based multi-add
+        const skillsForm = document.getElementById("skills-form");
+        if (skillsForm) {
+            skillsForm.addEventListener("submit", async (e) => {
+                e.preventDefault();
+                const category = skillsForm.querySelector("[name='category']").value;
+                const namesInput = skillsForm.querySelector("[name='name']").value;
+                
+                // Parse comma-separated names
+                const names = namesInput.split(',').map(name => name.trim()).filter(name => name.length > 0);
+                
+                if (names.length === 0) return;
+
+                // Show loading indicator / disable button
+                const submitBtn = skillsForm.querySelector("button[type='submit']");
+                const originalText = submitBtn.innerText;
+                submitBtn.disabled = true;
+                submitBtn.innerText = "Adding skills...";
+
+                try {
+                    // Send requests sequentially
+                    for (const name of names) {
+                        const formData = new FormData();
+                        formData.append("category", category);
+                        formData.append("name", name);
+                        
+                        await fetch(skillsForm.action, {
+                            method: "POST",
+                            body: formData
+                        });
+                    }
+                    
+                    // Reload on completion
+                    window.location.reload();
+                } catch (err) {
+                    console.error("Error adding skills: ", err);
+                    alert("An error occurred while adding skills. Please try again.");
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = originalText;
+                }
+            });
+        }
+    });
+</script>
 {% endblock %}

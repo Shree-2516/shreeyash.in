@@ -1,0 +1,109 @@
+<section id="certificates" class="content-section">
+    <div class="section-heading">
+        <p class="eyebrow">Professional Validation</p>
+        <h2>Certifications</h2>
+    </div>
+
+    <div class="certificate-grid">
+        {% set featured_certs = [] %}
+        {% for cert in certificates %}
+            {% if cert.featured %}
+                {% if featured_certs.append(cert) %}{% endif %}
+            {% endif %}
+        {% endfor %}
+
+        {% if certificates %}
+            {% set certs_to_show = featured_certs if featured_certs|length > 0 else certificates %}
+            {% for cert in certs_to_show %}
+                <article class="card certificate-card">
+                    {% if cert.image_filename %}
+                        <div class="certificate-badge-container">
+                            <img class="certificate-badge-image" src="{{ cert.image_url }}" alt="{{ cert.name }}">
+                        </div>
+                    {% else %}
+                        <div class="certificate-badge-container" style="background: linear-gradient(135deg, #1E1B4B 0%, #312E81 100%);">
+                            <span style="font-size: 2rem;">📜</span>
+                        </div>
+                    {% endif %}
+                    
+                    <h3>{{ cert.name }}</h3>
+                    <p class="certificate-org">{{ cert.organization }}</p>
+                    <p class="certificate-date">Issued: {{ cert.issue_date }}</p>
+                    
+                    {% if cert.credential_id or cert.credential_url %}
+                        <p class="certificate-meta">
+                            {% if cert.credential_id %}
+                                <span style="display: block; margin-bottom: 4px;">ID: <code>{{ cert.credential_id }}</code></span>
+                            {% endif %}
+                            {% if cert.credential_url %}
+                                <a href="{{ cert.credential_url }}" target="_blank" rel="noreferrer">Verify Credential ↗</a>
+                            {% endif %}
+                        </p>
+                    {% endif %}
+                    
+                    {% if cert.skills_covered %}
+                        <div class="certificate-skills">
+                            {% for skill in cert.skills_covered.split(',') if skill.strip() %}
+                                <span class="cert-skill-tag">{{ skill.strip() }}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </article>
+            {% endfor %}
+        {% else %}
+            <!-- Mock Fallback Certificates -->
+            <article class="card certificate-card">
+                <div class="certificate-badge-container" style="background: linear-gradient(135deg, #1E3A8A 0%, #0D9488 100%);">
+                    <span style="font-size: 2.2rem;">🎓</span>
+                </div>
+                <h3>Google Cloud Certified Associate Cloud Engineer</h3>
+                <p class="certificate-org">Google Cloud</p>
+                <p class="certificate-date">Issued: Jan 2025</p>
+                <p class="certificate-meta">
+                    <span style="display: block; margin-bottom: 4px;">ID: <code>GCP-ACE-98213</code></span>
+                    <a href="https://www.credential.net/" target="_blank" rel="noreferrer">Verify Credential ↗</a>
+                </p>
+                <div class="certificate-skills">
+                    <span class="cert-skill-tag">GCP</span>
+                    <span class="cert-skill-tag">Compute Engine</span>
+                    <span class="cert-skill-tag">Kubernetes (GKE)</span>
+                </div>
+            </article>
+
+            <article class="card certificate-card">
+                <div class="certificate-badge-container" style="background: linear-gradient(135deg, #4F46E5 0%, #06B6D4 100%);">
+                    <span style="font-size: 2.2rem;">⚡</span>
+                </div>
+                <h3>AWS Certified Developer - Associate</h3>
+                <p class="certificate-org">Amazon Web Services</p>
+                <p class="certificate-date">Issued: Nov 2024</p>
+                <p class="certificate-meta">
+                    <span style="display: block; margin-bottom: 4px;">ID: <code>AWS-DVA-87162</code></span>
+                    <a href="https://aws.amazon.com/verification" target="_blank" rel="noreferrer">Verify Credential ↗</a>
+                </p>
+                <div class="certificate-skills">
+                    <span class="cert-skill-tag">AWS Lambda</span>
+                    <span class="cert-skill-tag">DynamoDB</span>
+                    <span class="cert-skill-tag">API Gateway</span>
+                </div>
+            </article>
+
+            <article class="card certificate-card">
+                <div class="certificate-badge-container" style="background: linear-gradient(135deg, #1E1B4B 0%, #312E81 100%);">
+                    <span style="font-size: 2.2rem;">🤖</span>
+                </div>
+                <h3>Deep Learning Specialization</h3>
+                <p class="certificate-org">DeepLearning.AI / Coursera</p>
+                <p class="certificate-date">Issued: Sep 2024</p>
+                <p class="certificate-meta">
+                    <a href="https://coursera.org/verify" target="_blank" rel="noreferrer">Verify Credential ↗</a>
+                </p>
+                <div class="certificate-skills">
+                    <span class="cert-skill-tag">Deep Learning</span>
+                    <span class="cert-skill-tag">Neural Networks</span>
+                    <span class="cert-skill-tag">PyTorch</span>
+                </div>
+            </article>
+        {% endif %}
+    </div>
+</section>

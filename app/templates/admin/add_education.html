@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main class="page-shell">
+    <section class="admin-shell">
+        <p class="eyebrow">Admin / Add Education</p>
+        <h2>Add Education Entry</h2>
+        <p class="hero-text">Add a new record of your academic achievements and coursework.</p>
+
+        <form class="admin-form" action="{{ url_for('admin.add_education') }}" method="post">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;">
+                <div>
+                    <label for="education_type">Education Type</label>
+                    <select id="education_type" name="education_type" required>
+                        <option value="SSC">SSC (School)</option>
+                        <option value="HSC">HSC (Junior College)</option>
+                        <option value="Diploma">Diploma</option>
+                        <option value="Degree">Degree (B.Tech / B.E.)</option>
+                        <option value="Master's">Master's</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="institution">Institution / University</label>
+                    <input id="institution" name="institution" type="text" required placeholder="e.g. Pune University">
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;">
+                <div>
+                    <label for="program">Program / Degree Name</label>
+                    <input id="program" name="program" type="text" placeholder="e.g. Bachelor of Technology">
+                </div>
+                <div>
+                    <label for="specialization">Specialization / Department</label>
+                    <input id="specialization" name="specialization" type="text" placeholder="e.g. Computer Engineering">
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+                <div>
+                    <label for="start_year">Start Year</label>
+                    <input id="start_year" name="start_year" type="text" placeholder="e.g. 2021">
+                </div>
+                <div>
+                    <label for="end_year">End Year (or Expected)</label>
+                    <input id="end_year" name="end_year" type="text" placeholder="e.g. 2025">
+                </div>
+                <div>
+                    <label for="display_order">Display Order</label>
+                    <input id="display_order" name="display_order" type="number" value="0">
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 24px; margin: 12px 0;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <input id="current_education" name="current_education" type="checkbox" style="width: auto;">
+                    <label for="current_education" style="margin: 0; cursor: pointer;">Currently studying here</label>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <input id="featured" name="featured" type="checkbox" style="width: auto;">
+                    <label for="featured" style="margin: 0; cursor: pointer;">Feature on homepage</label>
+                </div>
+            </div>
+
+            <label for="description">Description / Coursework / Highlights</label>
+            <textarea id="description" name="description" rows="5" placeholder="e.g. Major Coursework: Data Structures, Operating Systems, Database Systems.&#10;GPA: 9.8/10.0"></textarea>
+
+            <div class="admin-actions">
+                <button class="button" type="submit">Save Education</button>
+                <a class="button button-secondary" href="{{ url_for('admin.dashboard') }}#education">Cancel</a>
+            </div>
+        </form>
+    </section>
+</main>
+{% endblock %}

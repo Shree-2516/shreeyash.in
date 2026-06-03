@@ -2,32 +2,93 @@
 
 {% block content %}
 <main class="page-shell">
-    <section class="admin-shell narrow">
+    <section class="admin-shell">
         <p class="eyebrow">Admin / Add Project</p>
         <h2>Create a laboratory entry</h2>
-        <p class="hero-text">Use the Problem, Solution, Result format so each project reads sharply on the public portfolio.</p>
+        <p class="hero-text">Configure advanced parameters and descriptions for your recruiter-facing project detail page.</p>
 
         <form class="admin-form" action="{{ url_for('admin.add_project') }}" method="post" enctype="multipart/form-data">
-            <label for="title">Title</label>
-            <input id="title" name="title" type="text" required>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;">
+                <div>
+                    <label for="title">Title</label>
+                    <input id="title" name="title" type="text" required>
+                </div>
+                <div>
+                    <label for="slug">Slug (Auto-generated if blank)</label>
+                    <input id="slug" name="slug" type="text" placeholder="e.g. smart-city-vision">
+                </div>
+            </div>
 
-            <label for="tech_stack">Tech Stack</label>
-            <input id="tech_stack" name="tech_stack" type="text">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+                <div>
+                    <label for="category">Category</label>
+                    <input id="category" name="category" type="text" placeholder="e.g. Computer Vision / AI">
+                </div>
+                <div>
+                    <label for="project_status">Status</label>
+                    <select id="project_status" name="project_status">
+                        <option value="Completed">Completed</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Planning">Planning</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="display_order">Display Order</label>
+                    <input id="display_order" name="display_order" type="number" value="0">
+                </div>
+            </div>
 
-            <label for="github_link">GitHub Link</label>
-            <input id="github_link" name="github_link" type="text">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;">
+                <div>
+                    <label for="tech_stack">Tech Stack (comma separated)</label>
+                    <input id="tech_stack" name="tech_stack" type="text" placeholder="YOLOv8, OpenCV, Flask, PostgreSQL">
+                </div>
+                <div>
+                    <label for="github_link">GitHub Link</label>
+                    <input id="github_link" name="github_link" type="text" placeholder="https://github.com/...">
+                </div>
+                <div>
+                    <label for="live_demo_link">Live Demo Link</label>
+                    <input id="live_demo_link" name="live_demo_link" type="text" placeholder="https://...">
+                </div>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 10px; margin: 8px 0;">
+                <input id="featured_project" name="featured_project" type="checkbox" style="width: auto;">
+                <label for="featured_project" style="margin: 0; cursor: pointer;">Feature this project on the homepage</label>
+            </div>
+
+            <label for="short_description">Short Description (Displays on homepage cards)</label>
+            <textarea id="short_description" name="short_description" rows="3" required placeholder="A brief one or two sentence summary of the project."></textarea>
 
             <label for="problem">Problem</label>
-            <textarea id="problem" name="problem" rows="4" required></textarea>
+            <textarea id="problem" name="problem" rows="4" required placeholder="Describe the problem you solved."></textarea>
 
             <label for="solution">Solution</label>
-            <textarea id="solution" name="solution" rows="4" required></textarea>
+            <textarea id="solution" name="solution" rows="4" required placeholder="Describe the solution you built."></textarea>
 
-            <label for="result">Result</label>
-            <textarea id="result" name="result" rows="4" required></textarea>
+            <label for="result">Result &amp; Metrics</label>
+            <textarea id="result" name="result" rows="4" required placeholder="Metrics, speeds, accuracy or outcomes."></textarea>
 
-            <label for="image">Project Image</label>
-            <input id="image" name="image" type="file" accept=".png,.jpg,.jpeg,.gif,.webp">
+            <label for="architecture">Architecture Details</label>
+            <textarea id="architecture" name="architecture" rows="4" placeholder="Explain the system architecture or flow."></textarea>
+
+            <label for="key_features">Key Features (One feature per line)</label>
+            <textarea id="key_features" name="key_features" rows="4" placeholder="- Real-time video analytics&#10;- Low-latency frame queues"></textarea>
+
+            <label for="challenges">Challenges &amp; Solutions</label>
+            <textarea id="challenges" name="challenges" rows="4" placeholder="Describe the obstacles you faced and how you overcame them."></textarea>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-top: 10px;">
+                <div>
+                    <label for="image">Main Project Thumbnail</label>
+                    <input id="image" name="image" type="file" accept=".png,.jpg,.jpeg,.gif,.webp">
+                </div>
+                <div>
+                    <label for="gallery_images">Project Gallery Images (Upload multiple)</label>
+                    <input id="gallery_images" name="gallery_images" type="file" accept=".png,.jpg,.jpeg,.gif,.webp" multiple>
+                </div>
+            </div>
 
             <div class="admin-actions">
                 <button class="button" type="submit">Save Project</button>

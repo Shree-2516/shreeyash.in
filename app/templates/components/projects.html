@@ -1,49 +1,110 @@
 <section id="projects" class="content-section">
     <div class="section-heading">
         <p class="eyebrow">The Laboratory</p>
-        <h2>The main event</h2>
+        <h2>Featured Projects</h2>
     </div>
 
     <div class="project-grid">
         {% if projects %}
-            {% for p in projects[:3] %}
+            {% for p in projects %}
             <article class="card project-card">
                 {% if p.image_url %}
                 <img class="project-image" src="{{ p.image_url }}" alt="{{ p.title }}">
+                {% else %}
+                <div style="background: linear-gradient(135deg, #1E3A8A 0%, #0D9488 100%); width:100%; height:180px; border-radius:10px; margin-bottom:20px; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:1.25rem;">
+                    {{ p.category or 'AI Systems' }}
+                </div>
                 {% endif %}
+                
                 <h3>{{ p.title }}</h3>
+                
                 {% if p.tech_stack %}
-                <p><b>Tech Stack:</b> {{ p.tech_stack }}</p>
+                <div class="project-tech">
+                    {% for tech in p.tech_stack.split(',') if tech.strip() %}
+                    <span class="tech-tag">{{ tech.strip() }}</span>
+                    {% endfor %}
+                </div>
                 {% endif %}
-                <p><b>Problem:</b> {{ p.problem }}</p>
-                <p><b>Solution:</b> {{ p.solution }}</p>
-                <p><b>Result:</b> {{ p.result }}</p>
-                {% if p.github_link %}
-                <p><b>GitHub:</b> <a href="{{ p.github_link }}" target="_blank" rel="noreferrer">{{ p.github_link }}</a></p>
-                {% endif %}
+
+                <div class="project-details" style="margin-bottom: 20px; flex-grow: 1;">
+                    <p>{{ p.short_description or (p.problem[:120] ~ '...') }}</p>
+                </div>
+
+                <div class="project-actions">
+                    {% if p.live_demo_link %}
+                    <a class="button button-primary" href="{{ p.live_demo_link }}" target="_blank" rel="noreferrer">Live Demo</a>
+                    {% endif %}
+                    {% if p.github_link %}
+                    <a class="button button-secondary" href="{{ p.github_link }}" target="_blank" rel="noreferrer">GitHub</a>
+                    {% endif %}
+                    <a class="button button-ghost" href="{{ url_for('main.project_detail', slug=p.slug or p.id) }}">View Details</a>
+                </div>
             </article>
             {% endfor %}
         {% else %}
+            <!-- Mock Project 1 -->
             <article class="card project-card">
-                <p class="timeline-tag">AI / ML</p>
-                <h3>Smart City Municipal Issue Detection</h3>
-                <p><b>Problem:</b> Manual issue review slows response time for city complaints and field incidents.</p>
-                <p><b>Solution:</b> Built a Flask-powered detection workflow using YOLOv8 to classify and route municipal issues.</p>
-                <p><b>Result:</b> Reduced review friction and created a scalable backend-assisted reporting workflow.</p>
+                <div style="background: linear-gradient(135deg, #1E3A8A 0%, #0D9488 100%); width:100%; height:180px; border-radius:10px; margin-bottom:20px; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:1.25rem;">
+                    Computer Vision System
+                </div>
+                <h3>Smart City Computer Vision System</h3>
+                <div class="project-tech">
+                    <span class="tech-tag">YOLOv8</span>
+                    <span class="tech-tag">OpenCV</span>
+                    <span class="tech-tag">Flask</span>
+                    <span class="tech-tag">PostgreSQL</span>
+                </div>
+                <div class="project-details" style="margin-bottom: 20px; flex-grow: 1;">
+                    <p>Real-time YOLOv8-based computer vision workflow to automate municipal issue classification and field incident reporting.</p>
+                </div>
+                <div class="project-actions">
+                    <a class="button button-primary" href="#contact">Live Demo</a>
+                    <a class="button button-secondary" href="https://github.com/your-username" target="_blank" rel="noreferrer">GitHub</a>
+                    <a class="button button-ghost" href="#contact">View Details</a>
+                </div>
             </article>
+
+            <!-- Mock Project 2 -->
             <article class="card project-card">
-                <p class="timeline-tag">Full-Stack</p>
-                <h3>Personal Portfolio with Django/PostgreSQL</h3>
-                <p><b>Problem:</b> Needed a portfolio that proves backend architecture, not just front-end presentation.</p>
-                <p><b>Solution:</b> Built a Django and PostgreSQL portfolio with structured data models, admin control, and maintainable views.</p>
-                <p><b>Result:</b> Demonstrated end-to-end system design across data, templates, routing, and deployment readiness.</p>
+                <div style="background: linear-gradient(135deg, #4F46E5 0%, #06B6D4 100%); width:100%; height:180px; border-radius:10px; margin-bottom:20px; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:1.25rem;">
+                    Sentiment AI Platform
+                </div>
+                <h3>BTC Sentiment AI Platform</h3>
+                <div class="project-tech">
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">Machine Learning</span>
+                    <span class="tech-tag">News Scraping</span>
+                    <span class="tech-tag">Analytics</span>
+                </div>
+                <div class="project-details" style="margin-bottom: 20px; flex-grow: 1;">
+                    <p>Predictive machine learning models fueled by automated news and social media sentiment pipelines to capture crypto market signals.</p>
+                </div>
+                <div class="project-actions">
+                    <a class="button button-primary" href="#contact">Live Demo</a>
+                    <a class="button button-secondary" href="https://github.com/your-username" target="_blank" rel="noreferrer">GitHub</a>
+                    <a class="button button-ghost" href="#contact">View Details</a>
+                </div>
             </article>
+
+            <!-- Mock Project 3 -->
             <article class="card project-card">
-                <p class="timeline-tag">Data / Analytics</p>
-                <h3>Restaurant Recommendation System</h3>
-                <p><b>Problem:</b> Restaurant discovery becomes noisy when users face too many options with weak personalization.</p>
-                <p><b>Solution:</b> Applied a content-based recommendation approach to rank restaurants by feature similarity and user preference.</p>
-                <p><b>Result:</b> Improved decision quality and turned raw dining data into an actionable analytics product.</p>
+                <div style="background: linear-gradient(135deg, #1E1B4B 0%, #312E81 100%); width:100%; height:180px; border-radius:10px; margin-bottom:20px; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:1.25rem;">
+                    PG Automation System
+                </div>
+                <h3>PG Automation System</h3>
+                <div class="project-tech">
+                    <span class="tech-tag">Flask</span>
+                    <span class="tech-tag">PostgreSQL</span>
+                    <span class="tech-tag">Selenium</span>
+                </div>
+                <div class="project-details" style="margin-bottom: 20px; flex-grow: 1;">
+                    <p>Process automation and records management system eliminating manual entries for paying guest registrations.</p>
+                </div>
+                <div class="project-actions">
+                    <a class="button button-primary" href="#contact">Live Demo</a>
+                    <a class="button button-secondary" href="https://github.com/your-username" target="_blank" rel="noreferrer">GitHub</a>
+                    <a class="button button-ghost" href="#contact">View Details</a>
+                </div>
             </article>
         {% endif %}
     </div>

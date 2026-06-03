@@ -1,20 +1,16 @@
-<section id="contact" class="content-section contact-panel">
-    <div>
-        <p class="eyebrow">The API Endpoint</p>
-        <h2>Zero friction for recruiters</h2>
-        <p class="hero-text">
-            Clean links, direct context, and one-click resume access so it is easy to reach out.
+<section id="contact" class="content-section">
+    <div class="contact-container">
+        <h2>Let's Build Something Impactful</h2>
+        
+        <p class="contact-text">
+            Open to opportunities in Python Backend Development, AI Engineering, Machine Learning, Data Science, Data Engineering, and Analytics.
         </p>
-    </div>
-    <div class="card contact-json">
-<pre>{
-  "linkedin": "{{ profile.linkedin_url }}",
-  "github": "{{ profile.github_url }}",
-  "email": "{{ profile.email }}",
-  "resume": "{{ profile.resume_url }}"
-}</pre>
-        <div class="hero-actions">
-            <a class="button" href="{{ profile.resume_url }}">Download Resume</a>
+
+        <div class="contact-actions">
+            <a class="button button-primary" href="{{ profile.linkedin_url }}" target="_blank" rel="noreferrer">LinkedIn</a>
+            <a class="button button-secondary" href="{{ profile.github_url }}" target="_blank" rel="noreferrer">GitHub</a>
+            <a class="button button-secondary" href="mailto:{{ profile.email }}">Email Me</a>
+            <a class="button button-secondary" href="{{ profile.resume_url }}">Download Resume</a>
         </div>
     </div>
 </section>

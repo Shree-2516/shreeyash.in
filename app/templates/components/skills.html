@@ -1,54 +1,61 @@
 <section id="skills" class="content-section">
     <div class="section-heading">
-        <p class="eyebrow">The Tech Stack Dependencies</p>
-        <h2>Depth, not just a list</h2>
+        <p class="eyebrow">Technical Capability</p>
+        <h2>Skills &amp; Technologies</h2>
     </div>
-    <div class="dependency-grid">
+
+    <div class="skills-dashboard-grid">
         {% if skills %}
             {% for category, items in skills|groupby('category') %}
-            <article class="card">
+            <article class="card skills-category-card">
                 <h3>{{ category or "General" }}</h3>
-                <div class="chip-wrap">
+                <div class="skills-list">
                     {% for skill in items %}
-                    <span class="chip">{{ skill.name }}</span>
+                    <span class="skill-tag">{{ skill.name }}</span>
                     {% endfor %}
                 </div>
             </article>
             {% endfor %}
         {% else %}
-            <article class="card">
-                <h3>Languages</h3>
-                <div class="chip-wrap">
-                    <span class="chip">Python (Advanced)</span>
-                    <span class="chip">JavaScript</span>
-                    <span class="chip">SQL</span>
-                </div>
-            </article>
-            <article class="card">
+            <!-- Backend -->
+            <article class="card skills-category-card">
                 <h3>Backend</h3>
-                <div class="chip-wrap">
-                    <span class="chip">Node.js</span>
-                    <span class="chip">Django</span>
-                    <span class="chip">Flask</span>
-                    <span class="chip">FastAPI</span>
+                <div class="skills-list">
+                    <span class="skill-tag">Python</span>
+                    <span class="skill-tag">Flask</span>
+                    <span class="skill-tag">Django</span>
+                    <span class="skill-tag">FastAPI</span>
+                    <span class="skill-tag">PostgreSQL</span>
+                    <span class="skill-tag">MongoDB</span>
+                    <span class="skill-tag">JWT</span>
+                    <span class="skill-tag">REST APIs</span>
                 </div>
             </article>
-            <article class="card">
-                <h3>Data &amp; AI</h3>
-                <div class="chip-wrap">
-                    <span class="chip">YOLOv8</span>
-                    <span class="chip">TensorFlow</span>
-                    <span class="chip">MobileNetV2</span>
-                    <span class="chip">Pandas</span>
+
+            <!-- AI / ML -->
+            <article class="card skills-category-card">
+                <h3>AI / ML</h3>
+                <div class="skills-list">
+                    <span class="skill-tag">Pandas</span>
+                    <span class="skill-tag">NumPy</span>
+                    <span class="skill-tag">Scikit-Learn</span>
+                    <span class="skill-tag">YOLOv8</span>
+                    <span class="skill-tag">OpenCV</span>
+                    <span class="skill-tag">Machine Learning</span>
+                    <span class="skill-tag">Data Analysis</span>
                 </div>
             </article>
-            <article class="card">
-                <h3>Cloud / Tools</h3>
-                <div class="chip-wrap">
-                    <span class="chip">Google Cloud</span>
-                    <span class="chip">Vertex AI</span>
-                    <span class="chip">Git</span>
-                    <span class="chip">Docker</span>
+
+            <!-- Cloud & DevOps -->
+            <article class="card skills-category-card">
+                <h3>Cloud &amp; DevOps</h3>
+                <div class="skills-list">
+                    <span class="skill-tag">AWS</span>
+                    <span class="skill-tag">GCP</span>
+                    <span class="skill-tag">Docker</span>
+                    <span class="skill-tag">Linux</span>
+                    <span class="skill-tag">Git</span>
+                    <span class="skill-tag">GitHub</span>
                 </div>
             </article>
         {% endif %}

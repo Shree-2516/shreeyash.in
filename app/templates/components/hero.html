@@ -1,37 +1,94 @@
 <section class="hero-panel">
-    <div class="hero-card terminal-shell">
-        <div class="terminal-topbar">
-            <span></span>
-            <span></span>
-            <span></span>
+    <!-- Left: Profile Image -->
+    <div class="hero-avatar-container">
+        <img class="hero-avatar" src="/static/uploads/profile_avatar.png" alt="{{ profile.name }}">
+    </div>
+
+    <!-- Center: Core Information -->
+    <div class="hero-copy">
+        <p class="eyebrow">Interactive Portfolio</p>
+        <h1>{{ profile.name }}</h1>
+        
+        <div class="hero-badges">
+            <span class="hero-badge">Python Backend Developer</span>
+            <span class="hero-badge">AI / ML Engineer</span>
+            <span class="hero-badge">Data Science Intern</span>
         </div>
-        <p class="terminal-line">$ load_profile.sh</p>
-        <div class="terminal-stream">
-            <p><span class="prompt">&gt;</span> initializing...</p>
-            <p><span class="prompt">&gt;</span> backend_engineer_detected <span class="terminal-ok">[ok]</span></p>
-            <p><span class="prompt">&gt;</span> ai_ml_module_loaded <span class="terminal-ok">[ok]</span></p>
-            <p><span class="prompt">&gt;</span> tech_stack: {{ profile.tech_stack_summary|lower }}</p>
-            <p><span class="prompt">&gt;</span> status: ready_for_hiring</p>
+
+        <p class="hero-text">
+            Building AI systems, backend services, and data-driven applications.
+        </p>
+
+        <div class="hero-actions">
+            <a class="button button-primary" href="{{ profile.resume_url }}">Download Resume</a>
+            <button class="button button-secondary" onclick="scrollToProjects()">View Projects</button>
+        </div>
+
+        <div class="hero-socials">
+            <a class="social-link" href="{{ profile.linkedin_url }}" target="_blank" rel="noreferrer">
+                <span>IN</span> LinkedIn
+            </a>
+            <a class="social-link" href="{{ profile.github_url }}" target="_blank" rel="noreferrer">
+                <span>GH</span> GitHub
+            </a>
+            <a class="social-link" href="mailto:{{ profile.email }}">
+                <span>✉</span> Email
+            </a>
         </div>
     </div>
 
-    <div class="hero-copy">
-        <p class="eyebrow">The Hook</p>
-        <h1>{{ profile.name }}</h1>
-        <p class="hero-text">
-            {{ profile.tagline }}
-        </p>
-        <p class="hero-proof">
-            Building backend systems, intelligent data products, and portfolio-ready full-stack experiences.
-        </p>
-        <div class="hero-actions">
-            <button class="button terminal-button" onclick="scrollToProjects()">View Projects</button>
-            <a class="button button-secondary" href="{{ profile.resume_url }}">Download Resume</a>
-            <a class="button button-ghost" href="{{ url_for('main.journey') }}">View My Journey</a>
+    <!-- Right: Skill Dashboard -->
+    <div class="hero-skills-dashboard">
+        <h3>System Metrics</h3>
+        
+        <div class="dashboard-skill">
+            <div class="skill-info">
+                <span>Python</span>
+                <span>90%</span>
+            </div>
+            <div class="skill-bar-container">
+                <div class="skill-bar" style="width: 90%;"></div>
+            </div>
         </div>
-        <div class="social-proof">
-            <a class="social-link" href="{{ profile.github_url }}" target="_blank" rel="noreferrer">GH GitHub</a>
-            <a class="social-link" href="{{ profile.linkedin_url }}" target="_blank" rel="noreferrer">IN LinkedIn</a>
+
+        <div class="dashboard-skill">
+            <div class="skill-info">
+                <span>Flask</span>
+                <span>80%</span>
+            </div>
+            <div class="skill-bar-container">
+                <div class="skill-bar" style="width: 80%;"></div>
+            </div>
+        </div>
+
+        <div class="dashboard-skill">
+            <div class="skill-info">
+                <span>Machine Learning</span>
+                <span>80%</span>
+            </div>
+            <div class="skill-bar-container">
+                <div class="skill-bar" style="width: 80%;"></div>
+            </div>
+        </div>
+
+        <div class="dashboard-skill">
+            <div class="skill-info">
+                <span>SQL</span>
+                <span>85%</span>
+            </div>
+            <div class="skill-bar-container">
+                <div class="skill-bar" style="width: 85%;"></div>
+            </div>
+        </div>
+
+        <div class="dashboard-skill">
+            <div class="skill-info">
+                <span>AWS</span>
+                <span>60%</span>
+            </div>
+            <div class="skill-bar-container">
+                <div class="skill-bar" style="width: 60%;"></div>
+            </div>
         </div>
     </div>
 </section>
