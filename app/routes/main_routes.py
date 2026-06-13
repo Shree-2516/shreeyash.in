@@ -26,6 +26,11 @@ def home():
                            certificates=certificates)
 
 
+@main.route("/health")
+def health():
+    return "OK", 200
+
+
 @main.route("/journey")
 def journey():
     profile = PortfolioProfile.get_or_create()
