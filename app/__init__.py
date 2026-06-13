@@ -1,14 +1,14 @@
-import os
-
 from flask import Flask, flash, redirect, request, url_for
 from werkzeug.exceptions import RequestEntityTooLarge
 
 from .config import Config
 from .extensions import db, login_manager, migrate
+from .services.cloudinary_storage import configure_cloudinary
 
 def create_app(include_main=True, include_admin=True, admin_prefix="/admin"):
     app = Flask(__name__)
     app.config.from_object(Config)
+    configure_cloudinary(app)
 
     db.init_app(app)
     migrate.init_app(app, db)
@@ -24,8 +24,12 @@ def create_app(include_main=True, include_admin=True, admin_prefix="/admin"):
     from .models.portfolio import PortfolioProfile
     from .models.education import Education
     from .models.certificate import Certificate
-
-    os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
+    from .routes.admin_routes import (
+        ensure_certificate_schema,
+        ensure_portfolio_schema,
+        ensure_project_image_schema,
+        ensure_project_schema,
+    )
 
     @login_manager.user_loader
     def load_user(user_id):
@@ -36,6 +40,10 @@ def create_app(include_main=True, include_admin=True, admin_prefix="/admin"):
         if app.extensions.get("database_bootstrap_complete"):
             return
         db.create_all()
+        ensure_project_schema()
+        ensure_portfolio_schema()
+        ensure_project_image_schema()
+        ensure_certificate_schema()
         app.extensions["database_bootstrap_complete"] = True
 
     @app.errorhandler(RequestEntityTooLarge)

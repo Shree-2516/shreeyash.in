@@ -110,7 +110,7 @@
                 <h2>Edit Developer Profile</h2>
             </div>
 
-            <form class="admin-form" action="{{ url_for('admin.dashboard') }}" method="post">
+            <form class="admin-form" action="{{ url_for('admin.dashboard') }}" method="post" enctype="multipart/form-data">
                 <!-- Section 1: Personal Info -->
                 <div class="form-section-card">
                     <h3>Personal Information</h3>
@@ -152,6 +152,33 @@
                         <div>
                             <label for="tech_stack_summary">Tech Stack Summary</label>
                             <input id="tech_stack_summary" name="tech_stack_summary" type="text" value="{{ profile.tech_stack_summary }}">
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-top: 16px;">
+                        <div>
+                            <label for="profile_photo">Profile Photo</label>
+                            <input id="profile_photo" name="profile_photo" type="file" accept=".png,.jpg,.jpeg,.gif,.webp">
+                            <p style="margin: 8px 0 0; font-size: 0.85rem; color: var(--text-sec);">Current file: {{ profile.profile_photo_filename or "Default avatar" }}</p>
+                            <div style="margin-top: 10px; display: flex; align-items: center; gap: 12px;">
+                                <img src="{{ profile.profile_photo_url }}" alt="{{ profile.name }}" style="width: 56px; height: 56px; object-fit: cover; border-radius: 50%; border: 1px solid var(--card-border);">
+                                <label style="display: inline-flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-sec);">
+                                    <input type="checkbox" name="remove_profile_photo">
+                                    Remove current photo
+                                </label>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="resume_file">Resume PDF</label>
+                            <input id="resume_file" name="resume_file" type="file" accept=".pdf">
+                            <p style="margin: 8px 0 0; font-size: 0.85rem; color: var(--text-sec);">Current file: {{ profile.resume_filename or "Default resume" }}</p>
+                            <div style="margin-top: 10px; display: flex; align-items: center; gap: 12px;">
+                                <a class="button button-ghost" href="{{ profile.resume_link }}" target="_blank" rel="noreferrer" style="padding: 8px 14px; min-height: auto;">Preview resume</a>
+                                <label style="display: inline-flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-sec);">
+                                    <input type="checkbox" name="remove_resume_file">
+                                    Remove uploaded PDF
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>

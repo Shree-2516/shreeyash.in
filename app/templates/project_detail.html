@@ -11,7 +11,7 @@
             <a href="{{ url_for('main.home') }}#experience">Experience</a>
             <a href="{{ url_for('main.home') }}#skills">Skills</a>
             <a href="{{ url_for('main.home') }}#contact">Contact</a>
-            <a href="{{ profile.resume_url }}">Resume</a>
+            <a href="{{ profile.resume_link }}">Resume</a>
         </div>
     </nav>
 
@@ -141,7 +141,7 @@
         </p>
         <div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
             <a class="button button-primary" href="{{ url_for('main.home') }}#contact">Get In Touch</a>
-            <a class="button button-secondary" href="{{ profile.resume_url }}">Download Resume</a>
+            <a class="button button-secondary" href="{{ profile.resume_link }}">Download Resume</a>
         </div>
     </section>
 </main>

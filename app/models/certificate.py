@@ -1,4 +1,5 @@
 from app.extensions import db
+from app.services.cloudinary_storage import build_media_url
 
 class Certificate(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -8,6 +9,7 @@ class Certificate(db.Model):
     credential_id = db.Column(db.String(255))
     credential_url = db.Column(db.String(255))
     image_filename = db.Column(db.String(255))
+    image_public_id = db.Column(db.String(255))
     skills_covered = db.Column(db.String(255))
     featured = db.Column(db.Boolean, default=False, nullable=False)
     display_order = db.Column(db.Integer, default=0, nullable=False)
@@ -28,6 +30,8 @@ class Certificate(db.Model):
 
     @property
     def image_url(self):
-        if not self.image_filename:
-            return None
-        return f"/static/uploads/projects/{self.image_filename}"
+        return build_media_url(
+            public_id=self.image_public_id,
+            filename=self.image_filename,
+            local_prefix="uploads/projects",
+        )

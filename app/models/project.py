@@ -1,4 +1,5 @@
 from app.extensions import db
+from app.services.cloudinary_storage import build_media_url
 
 class Project(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -9,6 +10,7 @@ class Project(db.Model):
     github_link = db.Column(db.String(255))
     tech_stack = db.Column(db.String(255))
     image_filename = db.Column(db.String(255))
+    image_public_id = db.Column(db.String(255))
     
     # New Fields
     slug = db.Column(db.String(200), unique=True, nullable=True)
@@ -46,19 +48,25 @@ class Project(db.Model):
 
     @property
     def image_url(self):
-        if not self.image_filename:
-            return None
-        return f"/static/uploads/projects/{self.image_filename}"
+        return build_media_url(
+            public_id=self.image_public_id,
+            filename=self.image_filename,
+            local_prefix="uploads/projects",
+        )
 
 
 class ProjectImage(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     project_id = db.Column(db.Integer, db.ForeignKey('project.id', ondelete='CASCADE'), nullable=False)
     image_filename = db.Column(db.String(255), nullable=False)
+    image_public_id = db.Column(db.String(255))
 
     project = db.relationship('Project', backref=db.backref('images', lazy=True, cascade='all, delete-orphan'))
 
     @property
     def image_url(self):
-        return f"/static/uploads/projects/{self.image_filename}"
-
+        return build_media_url(
+            public_id=self.image_public_id,
+            filename=self.image_filename,
+            local_prefix="uploads/projects",
+        )

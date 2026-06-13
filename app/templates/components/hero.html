@@ -1,7 +1,7 @@
 <section class="hero-panel">
     <!-- Left: Profile Image -->
     <div class="hero-avatar-container">
-        <img class="hero-avatar" src="/static/uploads/profile_avatar.png" alt="{{ profile.name }}">
+        <img class="hero-avatar" src="{{ profile.profile_photo_url }}" alt="{{ profile.name }}">
     </div>
 
     <!-- Center: Core Information -->
@@ -20,7 +20,7 @@
         </p>
 
         <div class="hero-actions">
-            <a class="button button-primary" href="{{ profile.resume_url }}">Download Resume</a>
+            <a class="button button-primary" href="{{ profile.resume_link }}">Download Resume</a>
             <button class="button button-secondary" onclick="scrollToProjects()">View Projects</button>
         </div>
 

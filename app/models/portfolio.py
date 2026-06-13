@@ -1,4 +1,5 @@
 from app.extensions import db
+from app.services.cloudinary_storage import build_media_url
 
 
 class PortfolioProfile(db.Model):
@@ -25,6 +26,10 @@ class PortfolioProfile(db.Model):
     github_url = db.Column(db.String(255), default="https://github.com/your-username")
     email = db.Column(db.String(255), default="yourmail@example.com")
     resume_url = db.Column(db.String(255), default="/static/resume.pdf")
+    profile_photo_filename = db.Column(db.String(255))
+    profile_photo_public_id = db.Column(db.String(255))
+    resume_filename = db.Column(db.String(255))
+    resume_public_id = db.Column(db.String(255))
     degree = db.Column(db.String(255), default="Bachelor's Degree in Computer Science / Related Field")
     university = db.Column(db.String(255), default="Add your university name")
     coursework = db.Column(
@@ -48,3 +53,33 @@ class PortfolioProfile(db.Model):
             db.session.add(profile)
             db.session.commit()
         return profile
+
+    @property
+    def profile_photo_url(self):
+        return build_media_url(
+            public_id=self.profile_photo_public_id,
+            filename=self.profile_photo_filename,
+            local_prefix="uploads/profile",
+            default_url="/static/profile_avatar.png",
+        )
+
+    @property
+    def resume_link(self):
+        if self.resume_public_id and self.resume_url and not self.resume_url.startswith("/static/"):
+            return self.resume_url
+        if self.resume_public_id:
+            return build_media_url(
+                public_id=self.resume_public_id,
+                filename=self.resume_filename,
+                local_prefix="uploads/resumes",
+                resource_type="raw",
+            )
+        if self.resume_filename:
+            return build_media_url(
+                public_id=None,
+                filename=self.resume_filename,
+                local_prefix="uploads/resumes",
+            )
+        if self.resume_url:
+            return self.resume_url
+        return "/static/resume.pdf"
