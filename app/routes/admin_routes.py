@@ -126,39 +126,6 @@ def login():
     return render_template("admin/login.html")
 
 
-@admin.route("/register", methods=["GET", "POST"])
-def register():
-    if current_user.is_authenticated:
-        return redirect(url_for("admin.dashboard"))
-
-    if request.method == "POST":
-        username = request.form.get("username", "").strip()
-        password = request.form.get("password", "")
-        confirm_password = request.form.get("confirm_password", "")
-
-        if not username or not password:
-            flash("Username and password are required.", "error")
-            return render_template("admin/register.html")
-
-        if password != confirm_password:
-            flash("Passwords do not match.", "error")
-            return render_template("admin/register.html")
-
-        existing_user = User.query.filter_by(username=username).first()
-        if existing_user:
-            flash("Username already exists.", "error")
-            return render_template("admin/register.html")
-
-        # Create new admin user
-        new_admin = User(username=username, is_admin=True)
-        new_admin.set_password(password)
-        db.session.add(new_admin)
-        db.session.commit()
-
-        flash("Admin account created successfully. Please sign in.", "success")
-        return redirect(url_for("admin.login"))
-
-    return render_template("admin/register.html")
 
 
 @admin.route("/logout", methods=["POST"])
