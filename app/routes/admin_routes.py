@@ -11,7 +11,7 @@ from app.models.user import User
 from app.models.education import Education
 from app.models.certificate import Certificate
 from app.models.why_hire_me import WhyHireMe
-from app.services.cloudinary_storage import delete_media, store_media
+from app.services.cloudinary_storage import cloudinary_enabled, delete_media, store_media
 
 admin = Blueprint('admin', __name__)
 
@@ -321,6 +321,8 @@ def dashboard():
         flash("Portfolio content updated.", "success")
         return redirect(url_for("admin.dashboard"))
 
+    if not cloudinary_enabled():
+        flash("Warning: Cloudinary is not configured. Uploaded images will be stored locally on Render's temporary filesystem and will be lost on the next redeploy. Please set CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET in your environment variables.", "error")
     return render_template("admin/dashboard.html", **build_dashboard_context(profile))
 
 @admin.route("/add_project", methods=["GET", "POST"])
