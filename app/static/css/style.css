@@ -2,6 +2,49 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@400;600;700&display=swap');
 
 :root {
+    /* Theme independent constants */
+    --success: #10B981;
+    --danger: #EF4444;
+    --info: #3B82F6;
+    
+    /* Default to Light Theme variables */
+    --bg: #F8FAFC;
+    --bg-sec: #FFFFFF;
+    --card-bg: #FFFFFF;
+    --card-border: rgba(37, 99, 235, 0.15);
+    --accent: #2563EB;
+    --accent-sec: #3B82F6;
+    --text: #0F172A;
+    --text-sec: #475569;
+    --text-muted: #64748B;
+    
+    /* Light Mode Specifics */
+    --nav-bg: rgba(255, 255, 255, 0.8);
+    --radial-glow-1: rgba(37, 99, 235, 0.04);
+    --radial-glow-2: rgba(96, 165, 250, 0.04);
+    --card-shadow: 0 10px 30px rgba(37, 99, 235, 0.08);
+    --card-shadow-hover: 0 15px 35px rgba(37, 99, 235, 0.15);
+    
+    --btn-primary-bg: linear-gradient(135deg, #2563EB, #3B82F6);
+    --btn-primary-text: #FFFFFF;
+    --btn-primary-shadow: 0 4px 14px rgba(37, 99, 235, 0.2);
+    --btn-primary-hover-bg: linear-gradient(135deg, #1D4ED8, #2563EB);
+    
+    --btn-secondary-bg: #FFFFFF;
+    --btn-secondary-border: #2563EB;
+    --btn-secondary-text: #2563EB;
+    --btn-secondary-hover-bg: rgba(37, 99, 235, 0.05);
+    
+    --social-bg: #FFFFFF;
+    --social-text: #2563EB;
+    
+    --hero-avatar-glow: 0 10px 30px rgba(37, 99, 235, 0.12);
+    --skill-track: #E2E8F0;
+    
+    --transition-speed: 0.3s;
+}
+
+[data-theme="dark"] {
     --bg: #0B1220;
     --bg-sec: #0F172A;
     --card-bg: #111827;
@@ -10,9 +53,64 @@
     --accent-sec: #06B6D4;
     --text: #F8FAFC;
     --text-sec: #94A3B8;
-    --success: #10B981;
-    --danger: #EF4444;
-    --info: #3B82F6;
+    --text-muted: #94A3B8;
+    
+    /* Dark Mode Specifics */
+    --nav-bg: rgba(17, 24, 39, 0.75);
+    --radial-glow-1: rgba(59, 130, 246, 0.08);
+    --radial-glow-2: rgba(6, 182, 212, 0.08);
+    --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    --card-shadow-hover: 0 15px 35px rgba(59, 130, 246, 0.1);
+    
+    --btn-primary-bg: var(--accent);
+    --btn-primary-text: var(--text);
+    --btn-primary-shadow: 0 4px 14px rgba(59, 130, 246, 0.4);
+    --btn-primary-hover-bg: #2563EB;
+    
+    --btn-secondary-bg: transparent;
+    --btn-secondary-border: var(--card-border);
+    --btn-secondary-text: var(--text);
+    --btn-secondary-hover-bg: rgba(255, 255, 255, 0.05);
+    
+    --social-bg: var(--bg-sec);
+    --social-text: var(--text-sec);
+    
+    --hero-avatar-glow: 0 0 30px rgba(59, 130, 246, 0.25);
+    --skill-track: var(--bg-sec);
+}
+
+[data-theme="light"] {
+    --bg: #F8FAFC;
+    --bg-sec: #FFFFFF;
+    --card-bg: #FFFFFF;
+    --card-border: rgba(37, 99, 235, 0.15);
+    --accent: #2563EB;
+    --accent-sec: #3B82F6;
+    --text: #0F172A;
+    --text-sec: #475569;
+    --text-muted: #64748B;
+    
+    --nav-bg: rgba(255, 255, 255, 0.8);
+    --radial-glow-1: rgba(37, 99, 235, 0.04);
+    --radial-glow-2: rgba(96, 165, 250, 0.04);
+    --card-shadow: 0 10px 30px rgba(37, 99, 235, 0.08);
+    --card-shadow-hover: 0 15px 35px rgba(37, 99, 235, 0.15);
+    
+    --btn-primary-bg: linear-gradient(135deg, #2563EB, #3B82F6);
+    --btn-primary-text: #FFFFFF;
+    --btn-primary-shadow: 0 4px 14px rgba(37, 99, 235, 0.2);
+    --btn-primary-hover-bg: linear-gradient(135deg, #1D4ED8, #2563EB);
+    
+    --btn-secondary-bg: #FFFFFF;
+    --btn-secondary-border: #2563EB;
+    --btn-secondary-text: #2563EB;
+    --btn-secondary-hover-bg: rgba(37, 99, 235, 0.05);
+    
+    --social-bg: #FFFFFF;
+    --social-text: #2563EB;
+    
+    --hero-avatar-glow: 0 10px 30px rgba(37, 99, 235, 0.12);
+    --skill-track: #E2E8F0;
 }
 
 * {
@@ -32,8 +130,18 @@ body {
     line-height: 1.6;
     overflow-x: hidden;
     background-image: 
-        radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.08) 0%, transparent 40%),
-        radial-gradient(circle at 90% 80%, rgba(6, 182, 212, 0.08) 0%, transparent 40%);
+        radial-gradient(circle at 10% 20%, var(--radial-glow-1) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, var(--radial-glow-2) 0%, transparent 40%);
+}
+
+/* Global Transitions for Theme Toggling */
+body, .card, .site-nav, a, p, h1, h2, h3, span, .button, .social-link, .skill-bar-container, .hamburger, .hamburger::before, .hamburger::after, input, select, textarea, .theme-toggle-btn {
+    transition: background-color var(--transition-speed) ease, 
+                border-color var(--transition-speed) ease, 
+                color var(--transition-speed) ease, 
+                box-shadow var(--transition-speed) ease,
+                opacity 0.2s ease,
+                transform 0.3s ease;
 }
 
 a {
@@ -58,12 +166,12 @@ a {
     align-items: center;
     justify-content: space-between;
     padding: 16px 32px;
-    background: rgba(17, 24, 39, 0.75);
+    background: var(--nav-bg);
     backdrop-filter: blur(12px);
     border: 1px solid var(--card-border);
     border-radius: 999px;
     margin-bottom: 64px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    box-shadow: var(--card-shadow);
 }
 
 .site-brand {
@@ -81,6 +189,13 @@ a {
     gap: 24px;
 }
 
+@media (min-width: 769px) {
+    .site-nav-links {
+        margin-left: auto;
+        margin-right: 24px;
+    }
+}
+
 .site-nav-links a {
     font-size: 0.9rem;
     font-weight: 500;
@@ -89,6 +204,47 @@ a {
 
 .site-nav-links a:hover {
     color: var(--text);
+}
+
+.site-nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.theme-toggle-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-sec);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.theme-toggle-btn:hover {
+    background: rgba(59, 130, 246, 0.1);
+    color: var(--accent);
+}
+
+.theme-toggle-btn svg {
+    transition: transform 0.5s ease;
+}
+
+[data-theme="dark"] .theme-icon-sun { display: block; }
+[data-theme="dark"] .theme-icon-moon { display: none; }
+[data-theme="light"] .theme-icon-sun { display: none; }
+[data-theme="light"] .theme-icon-moon { display: block; }
+
+[data-theme="dark"] .theme-toggle-btn:hover svg {
+    transform: rotate(45deg);
+}
+
+[data-theme="light"] .theme-toggle-btn:hover svg {
+    transform: rotate(360deg);
 }
 
 /* Mobile Toggle Button (hidden on desktop) */
@@ -178,14 +334,13 @@ a {
     border: 1px solid var(--card-border);
     border-radius: 16px;
     padding: 32px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: var(--card-shadow);
 }
 
 .card:hover {
     transform: translateY(-4px);
-    border-color: rgba(59, 130, 246, 0.3);
-    box-shadow: 0 15px 35px rgba(59, 130, 246, 0.1);
+    border-color: var(--accent);
+    box-shadow: var(--card-shadow-hover);
 }
 
 /* Global Grid Layouts */
@@ -205,7 +360,6 @@ a {
     border-radius: 999px;
     cursor: pointer;
     border: 1px solid transparent;
-    transition: all 0.2s ease;
 }
 
 .button:hover {
@@ -213,25 +367,26 @@ a {
 }
 
 .button-primary, .button.terminal-button {
-    background-color: var(--accent);
-    color: var(--text);
-    box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4);
+    background: var(--btn-primary-bg);
+    color: var(--btn-primary-text);
+    box-shadow: var(--btn-primary-shadow);
 }
 
 .button-primary:hover, .button.terminal-button:hover {
-    background-color: #2563EB;
-    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.6);
+    background: var(--btn-primary-hover-bg);
+    opacity: 0.95;
 }
 
 .button-secondary {
-    background-color: transparent;
-    border-color: var(--card-border);
-    color: var(--text);
+    background-color: var(--btn-secondary-bg);
+    border-color: var(--btn-secondary-border);
+    color: var(--btn-secondary-text);
 }
 
 .button-secondary:hover {
-    background-color: rgba(255, 255, 255, 0.05);
-    border-color: var(--text-sec);
+    background-color: var(--btn-secondary-hover-bg);
+    border-color: var(--btn-secondary-border);
+    opacity: 0.95;
 }
 
 .button-ghost {
@@ -264,7 +419,7 @@ a {
     border-radius: 50%;
     object-fit: cover;
     border: 3px solid var(--accent);
-    box-shadow: 0 0 30px rgba(59, 130, 246, 0.25);
+    box-shadow: var(--hero-avatar-glow);
     background-color: var(--bg-sec);
 }
 
@@ -325,9 +480,9 @@ a {
     font-weight: 500;
     padding: 8px 16px;
     border-radius: 999px;
-    background-color: var(--bg-sec);
+    background-color: var(--social-bg);
     border: 1px solid var(--card-border);
-    color: var(--text-sec);
+    color: var(--social-text);
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -336,7 +491,7 @@ a {
 .social-link:hover {
     color: var(--text);
     border-color: var(--accent);
-    background-color: rgba(59, 130, 246, 0.05);
+    background-color: var(--btn-secondary-hover-bg);
 }
 
 /* Skill Dashboard on Right Side of Hero */
@@ -345,7 +500,7 @@ a {
     border: 1px solid var(--card-border);
     border-radius: 20px;
     padding: 24px;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--card-shadow);
 }
 
 .hero-skills-dashboard h3 {
@@ -377,7 +532,7 @@ a {
 
 .skill-bar-container {
     height: 8px;
-    background-color: var(--bg-sec);
+    background-color: var(--skill-track);
     border-radius: 4px;
     overflow: hidden;
 }
@@ -544,7 +699,7 @@ a {
     border-radius: 50%;
     background-color: var(--accent);
     border: 2px solid var(--bg);
-    box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+    box-shadow: 0 0 10px var(--accent);
 }
 
 .timeline-header {
@@ -641,7 +796,7 @@ a {
 .skill-tag:hover {
     color: var(--text);
     border-color: var(--accent);
-    background-color: rgba(59, 130, 246, 0.05);
+    background-color: var(--btn-secondary-hover-bg);
     transform: translateY(-2px);
 }
 
@@ -727,7 +882,7 @@ a {
     border-radius: 12px;
     background-color: var(--card-bg);
     border: 1px solid var(--card-border);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    box-shadow: var(--card-shadow-hover);
     cursor: pointer;
     font-size: 0.9rem;
     font-weight: 500;

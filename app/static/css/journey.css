@@ -1,8 +1,8 @@
 .journey-body {
     margin: 0;
     min-height: 100vh;
-    background: #081326;
-    color: #e8efff;
+    background: var(--bg);
+    color: var(--text);
     overflow-x: hidden;
 }
 
@@ -75,17 +75,23 @@
     flex-wrap: wrap;
     padding: 14px 16px;
     border-radius: 22px;
-    background: rgba(11, 25, 48, 0.72);
-    border: 1px solid rgba(119, 156, 227, 0.22);
+    background: var(--nav-bg);
+    border: 1px solid var(--card-border);
     backdrop-filter: blur(14px);
-    box-shadow: 0 20px 40px rgba(5, 14, 31, 0.32);
+    box-shadow: var(--card-shadow);
 }
 
 .journey-brand {
     text-decoration: none;
     font-weight: 800;
-    color: white;
+    color: var(--text);
     letter-spacing: -0.02em;
+}
+
+.journey-nav-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 .journey-nav-links {
@@ -97,18 +103,18 @@
 .journey-nav-links a {
     text-decoration: none;
     font-weight: 600;
-    color: #d7e6ff;
+    color: var(--text-sec);
     padding: 10px 14px;
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(157, 190, 255, 0.12);
+    background: var(--bg-sec);
+    border: 1px solid var(--card-border);
     transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
 }
 
 .journey-nav-links a:hover {
     transform: translateY(-2px);
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(157, 190, 255, 0.28);
+    background: var(--btn-secondary-hover-bg);
+    border-color: var(--accent);
 }
 
 .journey-hero {
@@ -128,19 +134,17 @@
 .journey-hero-copy {
     padding: 26px 20px;
     border-radius: 28px;
-    background:
-        linear-gradient(145deg, rgba(15, 40, 82, 0.92) 0%, rgba(31, 60, 118, 0.88) 100%);
-    border: 1px solid rgba(137, 177, 255, 0.18);
-    box-shadow: 0 28px 46px rgba(7, 19, 41, 0.32);
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    box-shadow: var(--card-shadow);
 }
 
 .journey-hero-panel {
     padding: 20px 18px;
     border-radius: 24px;
-    background:
-        linear-gradient(180deg, rgba(17, 26, 49, 0.96) 0%, rgba(10, 18, 34, 0.96) 100%);
-    border: 1px solid rgba(136, 178, 255, 0.16);
-    box-shadow: 0 22px 42px rgba(7, 19, 41, 0.28);
+    background: var(--bg-sec);
+    border: 1px solid var(--card-border);
+    box-shadow: var(--card-shadow);
 }
 
 .journey-terminal-label {
@@ -259,10 +263,10 @@
     overflow: hidden;
     padding: 24px 20px;
     border-radius: 24px;
-    border: 1px solid rgba(198, 211, 238, 0.18);
-    box-shadow: 0 18px 32px rgba(9, 22, 44, 0.22);
+    border: 1px solid var(--card-border);
+    box-shadow: var(--card-shadow);
     transform-style: preserve-3d;
-    transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+    transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease, background-color var(--transition-speed) ease, color var(--transition-speed) ease;
 }
 
 .content::after {
@@ -278,8 +282,8 @@
 
 .content:hover {
     transform: translateY(-8px) rotateX(4deg) rotateY(-4deg);
-    box-shadow: 0 28px 44px rgba(9, 22, 44, 0.28);
-    border-color: rgba(172, 198, 244, 0.32);
+    box-shadow: var(--card-shadow-hover);
+    border-color: var(--accent);
 }
 
 .content h3 {
@@ -344,10 +348,10 @@
     margin-top: 22px;
     padding: 28px 22px;
     border-radius: 28px;
-    background: linear-gradient(135deg, rgba(10, 35, 71, 0.95) 0%, rgba(28, 65, 129, 0.95) 100%);
-    border: 1px solid rgba(125, 165, 240, 0.2);
-    color: white;
-    box-shadow: 0 24px 44px rgba(7, 19, 41, 0.28);
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    color: var(--text);
+    box-shadow: var(--card-shadow);
 }
 
 .goal-card h2 {
