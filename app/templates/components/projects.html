@@ -7,7 +7,7 @@
     <div class="project-grid">
         {% if projects %}
             {% for p in projects %}
-            <article class="card project-card">
+            <article class="card project-card{% if loop.index > 3 %} hidden-project{% endif %}">
                 {% if p.image_url %}
                 <img class="project-image" src="{{ p.image_url }}" alt="{{ p.title }}">
                 {% else %}
@@ -108,4 +108,10 @@
             </article>
         {% endif %}
     </div>
+
+    {% if projects|length > 3 %}
+    <div style="text-align: center; margin-top: 40px;">
+        <button id="toggle-projects-btn" class="button button-secondary">View All Projects</button>
+    </div>
+    {% endif %}
 </section>

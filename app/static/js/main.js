@@ -85,4 +85,31 @@ document.addEventListener("DOMContentLoaded", () => {
             bar.style.width = pct + "%";
         });
     }, 100);
+
+    // Toggle Projects Card Visibility
+    const toggleProjectsBtn = document.getElementById("toggle-projects-btn");
+    const projectGrid = document.querySelector(".project-grid");
+    if (toggleProjectsBtn && projectGrid) {
+        toggleProjectsBtn.addEventListener("click", () => {
+            const isExpanded = projectGrid.classList.toggle("show-all");
+            toggleProjectsBtn.innerText = isExpanded ? "Show Less" : "View All Projects";
+            if (!isExpanded) {
+                document.getElementById("projects").scrollIntoView({ behavior: "smooth" });
+            }
+        });
+    }
+
+    // Toggle Certifications Card Visibility
+    const toggleCertsBtn = document.getElementById("toggle-certs-btn");
+    const certGrid = document.querySelector(".certificate-grid");
+    if (toggleCertsBtn && certGrid) {
+        toggleCertsBtn.addEventListener("click", () => {
+            const isExpanded = certGrid.classList.toggle("show-all");
+            toggleCertsBtn.innerText = isExpanded ? "Show Less" : "View All Certifications";
+            if (!isExpanded) {
+                document.getElementById("certificates").scrollIntoView({ behavior: "smooth" });
+            }
+        });
+    }
 });
+

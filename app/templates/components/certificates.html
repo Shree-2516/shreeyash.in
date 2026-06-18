@@ -15,7 +15,7 @@
         {% if certificates %}
             {% set certs_to_show = featured_certs if featured_certs|length > 0 else certificates %}
             {% for cert in certs_to_show %}
-                <article class="card certificate-card">
+                <article class="card certificate-card{% if loop.index > 3 %} hidden-cert{% endif %}">
                     {% if cert.image_filename %}
                         <div class="certificate-badge-container">
                             <img class="certificate-badge-image" src="{{ cert.image_url }}" alt="{{ cert.name }}">
@@ -106,4 +106,10 @@
             </article>
         {% endif %}
     </div>
+
+    {% if certs_to_show|length > 3 %}
+    <div style="text-align: center; margin-top: 40px;">
+        <button id="toggle-certs-btn" class="button button-secondary">View All Certifications</button>
+    </div>
+    {% endif %}
 </section>
