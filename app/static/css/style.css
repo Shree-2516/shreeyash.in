@@ -889,6 +889,36 @@ a {
         }
     }
 
+    .why-hire-grid {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        gap: 20px;
+        padding: 10px 4px 20px 4px;
+        margin: 0 -4px;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(59, 130, 246, 0.3) transparent;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .why-hire-grid::-webkit-scrollbar {
+        height: 6px;
+    }
+
+    .why-hire-grid::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .why-hire-grid::-webkit-scrollbar-thumb {
+        background-color: rgba(59, 130, 246, 0.3);
+        border-radius: 999px;
+    }
+
+    .why-card {
+        flex: 0 0 85%;
+        scroll-snap-align: center;
+    }
+
     .project-grid {
         grid-template-columns: 1fr;
     }
