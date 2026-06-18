@@ -76,4 +76,13 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     }
+
+    // Animate skill bars on load
+    const skillBars = document.querySelectorAll(".skill-bar[data-pct]");
+    setTimeout(() => {
+        skillBars.forEach(bar => {
+            const pct = bar.getAttribute("data-pct");
+            bar.style.width = pct + "%";
+        });
+    }, 100);
 });
