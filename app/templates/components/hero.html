@@ -40,6 +40,13 @@
     <!-- Right: Skill Dashboard -->
     <div class="hero-skills-dashboard">
         <h3>System Metrics</h3>
+        <style>
+            {% for metric in profile.system_metrics_list %}
+            .skill-bar-{{ loop.index }} {
+                width: {{ metric.value }}%;
+            }
+            {% endfor %}
+        </style>
 
         {% for metric in profile.system_metrics_list %}
         <div class="dashboard-skill">
@@ -48,7 +55,7 @@
                 <span>{{ metric.value }}%</span>
             </div>
             <div class="skill-bar-container">
-                <div class="skill-bar" style="width: {{ metric.value }}%;"></div>
+                <div class="skill-bar skill-bar-{{ loop.index }}"></div>
             </div>
         </div>
         {% endfor %}
