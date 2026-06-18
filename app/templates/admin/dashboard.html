@@ -25,6 +25,9 @@
             <a href="#skills" class="menu-item" data-tab="skills">
                 <span class="menu-icon">🛠️</span> Skills
             </a>
+            <a href="#why-hire-me" class="menu-item" data-tab="why-hire-me">
+                <span class="menu-icon">❓</span> Why Hire Me
+            </a>
             <a href="#education" class="menu-item" data-tab="education">
                 <span class="menu-icon">🎓</span> Education
             </a>
@@ -212,6 +215,13 @@
                     <textarea id="achievements" name="achievements" rows="5">{{ profile.achievements }}</textarea>
                 </div>
 
+                <!-- Section 5: System Metrics -->
+                <div class="form-section-card">
+                    <h3>System Metrics</h3>
+                    <label for="system_metrics">System Metrics (Format: Skill Name: Percentage, one per line)</label>
+                    <textarea id="system_metrics" name="system_metrics" rows="5" placeholder="e.g.&#10;Python: 90&#10;Flask: 80&#10;Machine Learning: 80">{{ profile.system_metrics }}</textarea>
+                </div>
+
                 <div class="admin-actions">
                     <button class="button button-primary" type="submit" style="min-width: 160px;">Save Profile Changes</button>
                 </div>
@@ -355,10 +365,13 @@
                     <form class="admin-form" id="skills-form" action="{{ url_for('admin.add_skill') }}" method="post">
                         <label for="skill_category">Skill Category</label>
                         <select id="skill_category" name="category" required>
+                            <option value="Data Science">Data Science</option>
+                            <option value="Data Analysis">Data Analysis</option>
+                            <option value="AI and ML">AI and ML</option>
+                            <option value="Language">Language</option>
+                            <option value="Cloud and Tools">Cloud and Tools</option>
                             <option value="Backend">Backend</option>
-                            <option value="AI">AI / Machine Learning</option>
-                            <option value="Cloud">Cloud &amp; DevOps</option>
-                            <option value="Language">Language / Tools</option>
+                            <option value="Databases">Databases</option>
                         </select>
 
                         <div class="tag-input-container" style="margin-top: 12px;">
@@ -399,6 +412,53 @@
                         {% endfor %}
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <!-- WHY HIRE ME VIEW -->
+        <section id="tab-why-hire-me" class="tab-pane">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px;">
+                <div class="section-heading" style="text-align: left; margin: 0;">
+                    <p class="eyebrow">CMS Competencies</p>
+                    <h2>Manage Why Hire Me Cards</h2>
+                </div>
+                <a class="button button-primary" href="{{ url_for('admin.add_why_hire_me') }}">+ Add Card</a>
+            </div>
+
+            <div class="admin-table-container">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Icon</th>
+                            <th>Category Title</th>
+                            <th>Points</th>
+                            <th>Display Order</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for entry in why_hire_entries %}
+                        <tr>
+                            <td style="font-size: 1.5rem;">{{ entry.icon }}</td>
+                            <td style="font-weight: 600; color: var(--text);">{{ entry.title }}</td>
+                            <td style="font-size: 0.9rem; color: var(--text-sec); white-space: pre-line;">{{ entry.points }}</td>
+                            <td>{{ entry.display_order }}</td>
+                            <td>
+                                <div style="display: flex; gap: 12px; align-items: center;">
+                                    <a class="button button-secondary" href="{{ url_for('admin.edit_why_hire_me', id=entry.id) }}" style="padding: 6px 12px; font-size: 0.8rem; min-height: auto;">Edit</a>
+                                    <form action="{{ url_for('admin.delete_why_hire_me', id=entry.id) }}" method="post" onsubmit="return confirm('Are you sure you want to delete this competency card?');" style="margin: 0;">
+                                        <button class="delete-link" type="submit" style="font-size: 0.8rem; font-weight: 600; padding: 6px 0;">Delete</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="5" style="text-align: center; color: var(--text-sec); padding: 32px;">No competency cards registered yet.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </section>
 
@@ -592,7 +652,7 @@
         let activeTab = window.location.hash.substring(1) || localStorage.getItem('admin_active_tab') || 'dashboard';
         
         // Allowed tabs list
-        const allowedTabs = ['dashboard', 'profile', 'projects', 'experience', 'skills', 'settings', 'education', 'certificates'];
+        const allowedTabs = ['dashboard', 'profile', 'projects', 'experience', 'skills', 'settings', 'education', 'certificates', 'why-hire-me'];
         if (!allowedTabs.includes(activeTab)) {
             activeTab = 'dashboard';
         }

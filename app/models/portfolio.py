@@ -44,6 +44,26 @@ class PortfolioProfile(db.Model):
             "Built and tested trading strategy ideas with Pine Script."
         ),
     )
+    system_metrics = db.Column(
+        db.Text,
+        default="Python: 90\nFlask: 80\nMachine Learning: 80\nSQL: 85\nAWS: 60",
+    )
+
+    @property
+    def system_metrics_list(self):
+        if not self.system_metrics:
+            return []
+        metrics = []
+        for line in self.system_metrics.split("\n"):
+            line = line.strip()
+            if ":" in line:
+                name, pct = line.split(":", 1)
+                try:
+                    pct_val = int(pct.strip().replace("%", ""))
+                    metrics.append({"name": name.strip(), "value": pct_val})
+                except ValueError:
+                    metrics.append({"name": name.strip(), "value": 0})
+        return metrics
 
     @classmethod
     def get_or_create(cls):

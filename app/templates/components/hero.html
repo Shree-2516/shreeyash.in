@@ -6,9 +6,9 @@
 
     <!-- Center: Core Information -->
     <div class="hero-copy">
-        <p class="eyebrow">Interactive Portfolio</p>
+        <p class="eyebrow">Shree Portfolio</p>
         <h1>{{ profile.name }}</h1>
-        
+
         <div class="hero-badges">
             <span class="hero-badge">Python Backend Developer</span>
             <span class="hero-badge">AI / ML Engineer</span>
@@ -40,55 +40,17 @@
     <!-- Right: Skill Dashboard -->
     <div class="hero-skills-dashboard">
         <h3>System Metrics</h3>
-        
-        <div class="dashboard-skill">
-            <div class="skill-info">
-                <span>Python</span>
-                <span>90%</span>
-            </div>
-            <div class="skill-bar-container">
-                <div class="skill-bar" style="width: 90%;"></div>
-            </div>
-        </div>
 
+        {% for metric in profile.system_metrics_list %}
         <div class="dashboard-skill">
             <div class="skill-info">
-                <span>Flask</span>
-                <span>80%</span>
+                <span>{{ metric.name }}</span>
+                <span>{{ metric.value }}%</span>
             </div>
             <div class="skill-bar-container">
-                <div class="skill-bar" style="width: 80%;"></div>
+                <div class="skill-bar" style="width: {{ metric.value }}%;"></div>
             </div>
         </div>
-
-        <div class="dashboard-skill">
-            <div class="skill-info">
-                <span>Machine Learning</span>
-                <span>80%</span>
-            </div>
-            <div class="skill-bar-container">
-                <div class="skill-bar" style="width: 80%;"></div>
-            </div>
-        </div>
-
-        <div class="dashboard-skill">
-            <div class="skill-info">
-                <span>SQL</span>
-                <span>85%</span>
-            </div>
-            <div class="skill-bar-container">
-                <div class="skill-bar" style="width: 85%;"></div>
-            </div>
-        </div>
-
-        <div class="dashboard-skill">
-            <div class="skill-info">
-                <span>AWS</span>
-                <span>60%</span>
-            </div>
-            <div class="skill-bar-container">
-                <div class="skill-bar" style="width: 60%;"></div>
-            </div>
-        </div>
+        {% endfor %}
     </div>
 </section>

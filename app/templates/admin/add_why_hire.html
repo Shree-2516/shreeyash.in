@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main class="page-shell">
+    <section class="admin-shell">
+        <p class="eyebrow">Admin / Add Why Hire Me</p>
+        <h2>Add Core Competency / Why Hire Me Card</h2>
+        <p class="hero-text">Add a new core skill category cards with specialized list points to display in the Why Hire Me section.</p>
+
+        <form class="admin-form" action="{{ url_for('admin.add_why_hire_me') }}" method="post">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;">
+                <div>
+                    <label for="title">Category Title</label>
+                    <input id="title" name="title" type="text" required placeholder="e.g. Backend Engineering">
+                </div>
+                <div>
+                    <label for="icon">Icon / Emoji</label>
+                    <input id="icon" name="icon" type="text" required placeholder="e.g. ⚡, 🤖, 📈" value="⚡">
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;">
+                <div>
+                    <label for="display_order">Display Order</label>
+                    <input id="display_order" name="display_order" type="number" value="0">
+                </div>
+            </div>
+
+            <label for="points">Points (one per line)</label>
+            <textarea id="points" name="points" rows="8" required placeholder="e.g.&#10;REST APIs&#10;Authentication&#10;PostgreSQL&#10;Database Design"></textarea>
+
+            <div class="admin-actions">
+                <button class="button" type="submit">Save Competency</button>
+                <a class="button button-secondary" href="{{ url_for('admin.dashboard') }}#why-hire-me">Cancel</a>
+            </div>
+        </form>
+    </section>
+</main>
+{% endblock %}

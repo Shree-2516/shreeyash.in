@@ -5,47 +5,18 @@
     </div>
 
     <div class="why-hire-grid">
+        {% for entry in why_hire_entries %}
         <article class="card why-card">
-            <div class="why-card-icon">⚡</div>
-            <h3>Backend Engineering</h3>
+            <div class="why-card-icon">{{ entry.icon }}</div>
+            <h3>{{ entry.title }}</h3>
             <ul>
-                <li>REST APIs</li>
-                <li>Authentication</li>
-                <li>PostgreSQL</li>
-                <li>Database Design</li>
-                <li>Microservices</li>
-                <li>Flask</li>
-                <li>Django</li>
-                <li>FastAPI</li>
+                {% for point in entry.points.split('\n') %}
+                    {% if point.strip() %}
+                        <li>{{ point.strip() }}</li>
+                    {% endif %}
+                {% endfor %}
             </ul>
         </article>
-
-        <article class="card why-card">
-            <div class="why-card-icon">🤖</div>
-            <h3>AI / Machine Learning</h3>
-            <ul>
-                <li>YOLOv8</li>
-                <li>Computer Vision</li>
-                <li>Scikit-Learn</li>
-                <li>Pandas</li>
-                <li>NumPy</li>
-                <li>Model Training</li>
-                <li>Data Processing</li>
-            </ul>
-        </article>
-
-        <article class="card why-card">
-            <div class="why-card-icon">📈</div>
-            <h3>Data Eng &amp; Analytics</h3>
-            <ul>
-                <li>ETL Pipelines</li>
-                <li>Data Cleaning</li>
-                <li>Analytics</li>
-                <li>Data Visualization</li>
-                <li>Data Processing</li>
-                <li>Automation</li>
-                <li>Reporting</li>
-            </ul>
-        </article>
+        {% endfor %}
     </div>
 </section>

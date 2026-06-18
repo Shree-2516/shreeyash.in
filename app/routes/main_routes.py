@@ -5,6 +5,7 @@ from app.models.project import Project
 from app.models.skill import Skill
 from app.models.education import Education
 from app.models.certificate import Certificate
+from app.models.why_hire_me import WhyHireMe
 
 main = Blueprint('main', __name__)
 
@@ -16,6 +17,7 @@ def home():
     skills = Skill.query.all()
     educations = Education.query.order_by(Education.display_order.asc(), Education.id.desc()).all()
     certificates = Certificate.query.order_by(Certificate.display_order.asc(), Certificate.id.desc()).all()
+    why_hire_entries = WhyHireMe.query.order_by(WhyHireMe.display_order.asc(), WhyHireMe.id.asc()).all()
 
     return render_template("index.html",
                            profile=profile,
@@ -23,7 +25,8 @@ def home():
                            experiences=experiences,
                            skills=skills,
                            educations=educations,
-                           certificates=certificates)
+                           certificates=certificates,
+                           why_hire_entries=why_hire_entries)
 
 
 @main.route("/health")

@@ -24,6 +24,7 @@ def create_app(include_main=True, include_admin=True, admin_prefix="/admin"):
     from .models.portfolio import PortfolioProfile
     from .models.education import Education
     from .models.certificate import Certificate
+    from .models.why_hire_me import WhyHireMe
     from .routes.admin_routes import (
         ensure_certificate_schema,
         ensure_portfolio_schema,
@@ -44,6 +45,13 @@ def create_app(include_main=True, include_admin=True, admin_prefix="/admin"):
         ensure_portfolio_schema()
         ensure_project_image_schema()
         ensure_certificate_schema()
+        
+        # Seed default WhyHireMe content if table is empty
+        if WhyHireMe.query.count() == 0:
+            for item in WhyHireMe.get_defaults():
+                db.session.add(item)
+            db.session.commit()
+
         app.extensions["database_bootstrap_complete"] = True
 
     @app.errorhandler(RequestEntityTooLarge)

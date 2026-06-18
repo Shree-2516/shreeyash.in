@@ -10,6 +10,7 @@ from app.models.skill import Skill
 from app.models.user import User
 from app.models.education import Education
 from app.models.certificate import Certificate
+from app.models.why_hire_me import WhyHireMe
 from app.services.cloudinary_storage import delete_media, store_media
 
 admin = Blueprint('admin', __name__)
@@ -93,6 +94,9 @@ def ensure_portfolio_schema():
         db.session.execute(text("ALTER TABLE portfolio_profile ADD COLUMN resume_filename VARCHAR(255)"))
     if "resume_public_id" not in columns:
         db.session.execute(text("ALTER TABLE portfolio_profile ADD COLUMN resume_public_id VARCHAR(255)"))
+    if "system_metrics" not in columns:
+        db.session.execute(text("ALTER TABLE portfolio_profile ADD COLUMN system_metrics TEXT"))
+        db.session.execute(text("UPDATE portfolio_profile SET system_metrics = 'Python: 90\nFlask: 80\nMachine Learning: 80\nSQL: 85\nAWS: 60' WHERE system_metrics IS NULL"))
 
     db.session.commit()
 
@@ -221,6 +225,7 @@ def build_dashboard_context(profile):
         "experiences": Experience.query.order_by(Experience.id.desc()).all(),
         "educations": Education.query.order_by(Education.display_order.asc(), Education.id.desc()).all(),
         "certificates": Certificate.query.order_by(Certificate.display_order.asc(), Certificate.id.desc()).all(),
+        "why_hire_entries": WhyHireMe.query.order_by(WhyHireMe.display_order.asc(), WhyHireMe.id.asc()).all(),
     }
 
 
@@ -311,6 +316,7 @@ def dashboard():
         profile.university = request.form.get("university", "").strip()
         profile.coursework = request.form.get("coursework", "").strip()
         profile.achievements = request.form.get("achievements", "").strip()
+        profile.system_metrics = request.form.get("system_metrics", "").strip()
         db.session.commit()
         flash("Portfolio content updated.", "success")
         return redirect(url_for("admin.dashboard"))
@@ -694,3 +700,55 @@ def delete_certificate(id):
     db.session.commit()
     flash("Certificate deleted.", "info")
     return redirect(url_for("admin.dashboard") + "#certificates")
+
+
+@admin.route("/why_hire_me/add", methods=["GET", "POST"])
+@login_required
+def add_why_hire_me():
+    if request.method == "POST":
+        entry = WhyHireMe(
+            title=request.form.get("title", "").strip(),
+            icon=request.form.get("icon", "").strip(),
+            points=request.form.get("points", "").strip(),
+            display_order=int(request.form.get("display_order", "0") or 0)
+        )
+        db.session.add(entry)
+        db.session.commit()
+        flash("Why Hire Me card added successfully.", "success")
+        return redirect(url_for("admin.dashboard") + "#why-hire-me")
+    return render_template("admin/add_why_hire.html")
+
+
+@admin.route("/why_hire_me/edit/<int:id>", methods=["GET", "POST"])
+@login_required
+def edit_why_hire_me(id):
+    entry = db.session.get(WhyHireMe, id)
+    if entry is None:
+        flash("Card not found.", "error")
+        return redirect(url_for("admin.dashboard") + "#why-hire-me")
+
+    if request.method == "POST":
+        entry.title = request.form.get("title", "").strip()
+        entry.icon = request.form.get("icon", "").strip()
+        entry.points = request.form.get("points", "").strip()
+        entry.display_order = int(request.form.get("display_order", "0") or 0)
+
+        db.session.commit()
+        flash("Why Hire Me card updated successfully.", "success")
+        return redirect(url_for("admin.dashboard") + "#why-hire-me")
+
+    return render_template("admin/edit_why_hire.html", entry=entry)
+
+
+@admin.route("/why_hire_me/delete/<int:id>", methods=["POST"])
+@login_required
+def delete_why_hire_me(id):
+    entry = db.session.get(WhyHireMe, id)
+    if entry is None:
+        flash("Card not found.", "error")
+        return redirect(url_for("admin.dashboard") + "#why-hire-me")
+
+    db.session.delete(entry)
+    db.session.commit()
+    flash("Why Hire Me card deleted successfully.", "info")
+    return redirect(url_for("admin.dashboard") + "#why-hire-me")
