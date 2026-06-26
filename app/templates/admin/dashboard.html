@@ -247,6 +247,7 @@
                             <th>Category</th>
                             <th>Status</th>
                             <th>Featured</th>
+                            <th>Order</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -274,6 +275,7 @@
                                 <span style="color: var(--text-sec);">No</span>
                                 {% endif %}
                             </td>
+                            <td>{{ p.display_order }}</td>
                             <td>
                                 <div style="display: flex; gap: 12px; align-items: center;">
                                     <a class="button button-secondary" href="{{ url_for('admin.edit_project', id=p.id) }}" style="padding: 6px 12px; font-size: 0.8rem; min-height: auto;">Edit</a>

@@ -220,7 +220,7 @@ def remove_resume_file(public_id=None, filename=None):
 def build_dashboard_context(profile):
     return {
         "profile": profile,
-        "projects": Project.query.all(),
+        "projects": Project.query.order_by(Project.display_order.asc(), Project.id.desc()).all(),
         "skills": Skill.query.order_by(Skill.category.asc(), Skill.name.asc()).all(),
         "experiences": Experience.query.order_by(Experience.id.desc()).all(),
         "educations": Education.query.order_by(Education.display_order.asc(), Education.id.desc()).all(),
@@ -294,7 +294,15 @@ def dashboard():
             if upload_result:
                 profile.resume_filename = upload_result["filename"]
                 profile.resume_public_id = upload_result["public_id"]
-                profile.resume_url = upload_result.get("secure_url") or profile.resume_url
+                
+                if cloudinary_enabled():
+                    from app.services.cloudinary_storage import build_media_url
+                    profile.resume_url = build_media_url(
+                        public_id=upload_result["public_id"],
+                        resource_type="raw"
+                    )
+                else:
+                    profile.resume_url = upload_result.get("secure_url") or profile.resume_url
 
         if remove_resume_file_flag:
             remove_resume_file(profile.resume_public_id, profile.resume_filename)
@@ -311,7 +319,11 @@ def dashboard():
         profile.linkedin_url = request.form.get("linkedin_url", "").strip()
         profile.github_url = request.form.get("github_url", "").strip()
         profile.email = request.form.get("email", "").strip()
-        profile.resume_url = request.form.get("resume_url", "").strip()
+        
+        # Only update resume_url from text field if no file was uploaded
+        if not (resume_file and resume_file.filename):
+            profile.resume_url = request.form.get("resume_url", "").strip()
+            
         profile.degree = request.form.get("degree", "").strip()
         profile.university = request.form.get("university", "").strip()
         profile.coursework = request.form.get("coursework", "").strip()

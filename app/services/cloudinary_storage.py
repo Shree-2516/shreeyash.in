@@ -52,14 +52,23 @@ def store_media(file_storage, folder, folder_key, resource_type="image"):
         return None
 
     if cloudinary_enabled():
-        upload_result = cloudinary.uploader.upload(
-            file_storage,
-            folder=folder,
-            resource_type=resource_type,
-            use_filename=True,
-            unique_filename=True,
-            overwrite=False,
-        )
+        kwargs = {
+            "folder": folder,
+            "resource_type": resource_type,
+            "use_filename": True,
+            "unique_filename": True,
+            "overwrite": False,
+        }
+        if resource_type == "raw":
+            original_name = secure_filename(file_storage.filename or "")
+            if "." in original_name:
+                base_name, ext = original_name.rsplit(".", 1)
+                kwargs["public_id"] = f"{folder}/{base_name}_{uuid.uuid4().hex[:8]}.{ext}"
+                del kwargs["folder"]
+                del kwargs["use_filename"]
+                del kwargs["unique_filename"]
+
+        upload_result = cloudinary.uploader.upload(file_storage, **kwargs)
         return {
             "public_id": upload_result["public_id"],
             "filename": secure_filename(file_storage.filename or ""),
@@ -83,9 +92,9 @@ def delete_media(public_id=None, filename=None, folder_key=None, resource_type="
                 print(f"Error removing uploaded file: {exc}")
 
 
-def build_media_url(public_id=None, filename=None, local_prefix=None, resource_type="image", default_url=None):
+def build_media_url(public_id=None, filename=None, local_prefix=None, resource_type="image", default_url=None, **kwargs):
     if public_id and cloudinary_enabled():
-        return cloudinary_url(public_id, resource_type=resource_type, secure=True)[0]
+        return cloudinary_url(public_id, resource_type=resource_type, secure=True, **kwargs)[0]
 
     if filename and local_prefix:
         return f"/static/{local_prefix}/{filename}"

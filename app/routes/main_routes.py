@@ -12,7 +12,7 @@ main = Blueprint('main', __name__)
 @main.route("/")
 def home():
     profile = PortfolioProfile.get_or_create()
-    projects = Project.query.all()
+    projects = Project.query.order_by(Project.display_order.asc(), Project.id.desc()).all()
     experiences = Experience.query.all()
     skills = Skill.query.all()
     educations = Education.query.order_by(Education.display_order.asc(), Education.id.desc()).all()
@@ -42,7 +42,7 @@ def journey():
 
 @main.route("/api/projects")
 def api_projects():
-    projects = Project.query.order_by(Project.id.desc()).all()
+    projects = Project.query.order_by(Project.display_order.asc(), Project.id.desc()).all()
     return jsonify([project.to_dict() for project in projects])
 
 

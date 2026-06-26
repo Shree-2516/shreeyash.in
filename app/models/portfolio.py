@@ -92,7 +92,7 @@ class PortfolioProfile(db.Model):
                 public_id=self.resume_public_id,
                 filename=self.resume_filename,
                 local_prefix="uploads/resumes",
-                resource_type="raw",
+                resource_type="raw"
             )
         if self.resume_filename:
             return build_media_url(
